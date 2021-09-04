@@ -1,4 +1,4 @@
-package com.weedmaps.entity;
+package com.weedmaps.dataaccess.entity;
 
 import java.io.Serializable;
 

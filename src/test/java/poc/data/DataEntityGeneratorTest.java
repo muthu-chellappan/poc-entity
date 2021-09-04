@@ -28,6 +28,7 @@ public class DataEntityGeneratorTest {
         for (final WmAdTable table : tables) {
             lt.add(table.get());
         }
+        System.out.println("Total tables: " + tables.length);
         final String template = "./src/main/resources/data_entity.vm";
         final DataEntityGenerator gen = new DataEntityGenerator();
         final TableToTypeConverter converter = new TableToTypeConverter();

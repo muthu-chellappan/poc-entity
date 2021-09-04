@@ -3,35 +3,17 @@ package poc.sql;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@Data
 public class Table {
 
     private final String name;
-    private final List<Column> columns;
-    private final List<Constraint> constraints;
-    private final List<Key> keys;
-
-    public Table(final String name) {
-        this.name = name;
-        columns = new ArrayList<>();
-        constraints = new ArrayList<>();
-        keys = new ArrayList<>();
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public List<Column> getColumns() {
-        return columns;
-    }
-
-    public List<Constraint> getConstraints() {
-        return constraints;
-    }
-
-    public List<Key> getKeys() {
-        return keys;
-    }
+    private final List<Column> columns = new ArrayList<>();
+    private final List<Constraint> constraints = new ArrayList<>();
+    private final List<Key> keys = new ArrayList<>();
 
     public void add(final Column column) {
         if (column == null) {

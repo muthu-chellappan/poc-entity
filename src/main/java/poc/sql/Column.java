@@ -3,20 +3,24 @@ package poc.sql;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@Data
 public class Column {
 
     private final String name;
     private final String type;
     private final boolean nullable;
     private final String value;
-    private final List<String> values;
+    private final List<String> values = new ArrayList<>();
 
     public Column(final String name) {
         this.name = name;
         type = "VARCHAR";
         nullable = true;
         value = null;
-        values = new ArrayList<>();
     }
 
     public Column(final String name, final String type) {
@@ -24,7 +28,6 @@ public class Column {
         this.type = type;
         nullable = true;
         value = null;
-        values = new ArrayList<>();
     }
 
     public Column(final String name, final String type, final boolean nullable) {
@@ -32,23 +35,6 @@ public class Column {
         this.type = type;
         this.nullable = nullable;
         value = null;
-        values = new ArrayList<>();
-    }
-
-    public Column(final String name, final String type, final boolean nullable, final String value) {
-        this.name = name;
-        this.type = type;
-        this.nullable = nullable;
-        this.value = value;
-        values = new ArrayList<>();
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getType() {
-        return type;
     }
 
     public String getNullable() {
@@ -57,10 +43,6 @@ public class Column {
 
     public String getValue() {
         return value == null ? "" : ("DEFAULT " + value);
-    }
-
-    public List<String> getValues() {
-        return values;
     }
 
     public void addValue(final String value) {
