@@ -1,0 +1,24 @@
+-- Insert into generation
+#foreach( $table in $tables)
+  #set( $columns = 'created_by,updated_by' )
+  #set( $values = "'admin','admin'" )
+  #foreach( $column in $table.columns )
+    #set( $columns = $columns + ',' + $column.name )
+  #end
+  #set( $cvs = [] )
+  #foreach( $value in $table.columns.get(0).values )
+    #set( $swallow = $cvs.add($values) )
+  #end
+  #foreach( $column in $table.columns )
+    #foreach( $cv in $cvs )
+      #set( $index = $velocityCount - 1 )
+#** comments
+$cv -- $velocityCount -- $index -- $column.values.get($index)
+*#
+      #set( $cvs[$index] = $cvs[$index] + ',' + "'" + $column.values.get($index) + "'" )
+    #end
+  #end
+#foreach( $cv in $cvs )
+INSERT INTO $table.name (${columns}) VALUES (${cv});
+#end
+#end

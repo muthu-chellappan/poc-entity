@@ -1,0 +1,17 @@
+#foreach( $table in $tables)
+INSERT INTO "$table.name" (
+#foreach( $column in $table.columns)
+	"$column.name", 
+#end
+) VALUES   $table.rows
+#foreach( $row in $table.rows)
+ (
+#foreach( $data in $row.data)
+	$data,
+#end
+ ), 
+#end
+;
+
+#end
+
