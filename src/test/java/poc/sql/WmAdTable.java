@@ -232,7 +232,7 @@ public enum WmAdTable {
     FLIGHT_TARGET("flight_target",
             new String[] { "type#VARCHAR(100)#false", "flight_id#INT#false", "target_id#INT#false" },
             null,
-            new String[] { "flight_id#campaign#id", "target_id#target#id" }),
+            new String[] { "flight_id#flight#id", "target_id#target#id" }),
     OS_TARGET("os_target",
             new String[] { "os_id#INT#false" },
             null,
