@@ -40,7 +40,7 @@ public class DataEntityGeneratorTest {
             assertNotNull(out);
             writer.flush();
             System.out.println(out);
-            final String path = "src/test/java/com/weedmaps/entity/";
+            final String path = "src/test/java/com/weedmaps/dataccess/entity/";
             final File dir = new File(path);
             dir.mkdirs();
             final String file = path + entity.getName() + ".java";

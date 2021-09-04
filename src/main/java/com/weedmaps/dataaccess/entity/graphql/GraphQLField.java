@@ -1,4 +1,4 @@
-package com.weedmaps.entity.graphql;
+package com.weedmaps.dataaccess.entity.graphql;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
