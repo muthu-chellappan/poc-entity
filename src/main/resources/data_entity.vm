@@ -1,0 +1,23 @@
+package com.weedmaps.entity;
+
+import java.io.Serializable;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import com.weedmaps.entity.graphql.GraphQLField;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class $type.name implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+#foreach( $field in $type.fields)
+
+    @GraphQLField(name = "$field.absoluteName")
+    private $field.type $field.name;
+#end
+
+}
