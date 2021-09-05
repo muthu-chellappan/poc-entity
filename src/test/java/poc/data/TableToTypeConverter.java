@@ -13,14 +13,15 @@ public class TableToTypeConverter {
         }
         table.getColumns().forEach(col -> {
             final MatchType mt = DataEntityField.getMatchingType(col.getName(), col.getType(), table.getKeys());
-            type.getFields().add(new DataEntityField(mt.getType(), mt.getName()));
+            type.addField(new DataEntityField(mt.getType(), mt.getName()));
             if (mt.getKey() != null) {
                 final String kt = mt.getKey().getTable();
                 final String fn = DataEntityField.conventionalFieldName(kt);
                 final String ft = DataEntityType.conventionalTypeName(kt);
-                type.getFields().add(new DataEntityField(ft, fn));
+                type.addField(new DataEntityField(ft, fn));
             }
         });
+        type.getFields().parallelStream().forEach(field -> type.addImport(field.getCt()));
         return type;
     }
 

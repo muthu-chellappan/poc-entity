@@ -16,10 +16,23 @@ public class DataEntityField {
 
     private final String type;
     private final String name;
+    private final Class ct;
+
+    public DataEntityField(final Class type, final String name) {
+        this.type = type.getSimpleName();
+        this.ct = type;
+        this.name = name;
+    }
+
+    public DataEntityField(final String type, final String name) {
+        this.type = type;
+        this.ct = null;
+        this.name = name;
+    }
 
     public static MatchType getMatchingType(final String name, final String type, final List<Key> keys) {
         final Optional<Key> key = keys.stream().filter(k -> k.getCol().equals(name)).findFirst();
-        final MatchType match = new MatchType(name, DataType.find(type).type.getName());
+        final MatchType match = new MatchType(name, DataType.find(type).type);
         if (key.isPresent()) {
             match.setKey(key.get());
         }
@@ -88,7 +101,7 @@ public class DataEntityField {
     @Data
     static class MatchType {
         private final String name;
-        private final String type;
+        private final Class type;
 
         private Key key;
     }

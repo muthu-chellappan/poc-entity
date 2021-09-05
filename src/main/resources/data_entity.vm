@@ -1,6 +1,9 @@
 package com.weedmaps.dataaccess.entity;
 
 import java.io.Serializable;
+#foreach( $import in $type.sanitizedImports)
+import ${import};
+#end
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
