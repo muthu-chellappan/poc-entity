@@ -17,17 +17,20 @@ public class DataEntityField {
     private final String type;
     private final String name;
     private final Class ct;
+    private final String tableFieldName;
 
-    public DataEntityField(final Class type, final String name) {
+    public DataEntityField(final Class type, final String name, final String tableFieldName) {
         this.type = type.getSimpleName();
         this.ct = type;
         this.name = name;
+        this.tableFieldName = tableFieldName;
     }
 
-    public DataEntityField(final String type, final String name) {
+    public DataEntityField(final String type, final String name, final String tableFieldName) {
         this.type = type;
         this.ct = null;
         this.name = name;
+        this.tableFieldName = tableFieldName;
     }
 
     public static MatchType getMatchingType(final String name, final String type, final List<Key> keys) {

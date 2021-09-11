@@ -15,6 +15,7 @@ public class DataEntityType {
     private final String name;
     private final List<DataEntityField> fields = new ArrayList<>();
     private final Set<Class> imports = new HashSet<>();
+    private final String tableName;
 
     public String getName() {
         return conventionalTypeName(name);
@@ -48,19 +49,19 @@ public class DataEntityType {
 
     public void addDefaultFields() {
         fields.add(new DataEntityField(
-                DataEntityField.getMatchingType("id", "INT", Collections.emptyList()).getType(), "id"));
+                DataEntityField.getMatchingType("id", "INT", Collections.emptyList()).getType(), "id", "id"));
         fields.add(new DataEntityField(DataEntityField.getMatchingType("is_deleted", "BOOLEAN", Collections.emptyList())
-                .getType(), "is_deleted"));
+                .getType(), "is_deleted", "is_deleted"));
         fields.add(
                 new DataEntityField(DataEntityField.getMatchingType("created_at", "TIMESTAMP", Collections.emptyList())
-                        .getType(), "created_at"));
+                        .getType(), "created_at", "created_at"));
         fields.add(
                 new DataEntityField(DataEntityField.getMatchingType("updated_at", "TIMESTAMP", Collections.emptyList())
-                        .getType(), "updated_at"));
+                        .getType(), "updated_at", "updated_at"));
         fields.add(new DataEntityField(DataEntityField.getMatchingType("created_by", "VARCHAR", Collections.emptyList())
-                .getType(), "created_by"));
+                .getType(), "created_by", "created_by"));
         fields.add(new DataEntityField(DataEntityField.getMatchingType("updated_by", "VARCHAR", Collections.emptyList())
-                .getType(), "updated_by"));
+                .getType(), "updated_by", "updated_by"));
     }
 
 }

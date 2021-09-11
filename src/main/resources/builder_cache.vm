@@ -29,16 +29,16 @@ public class ${helper.type}BuildHelper extends AbstractBuildHelper {
 
     public void build(
 #if ($helper.transient)
-            final ${helper.type}Flights.Builder builder,
-            final List<${helper.type}> list,
-            final List<${helper.type}CacheTarget> targets) {
+        final ${helper.type}Flights.Builder builder,
+        final List<${helper.type}> list,
+        final List<${helper.type}CacheTarget> targets) {
 #elseif ($helper.hasTargets())
-            final ${helper.type}Flights.Builder builder,
-            final List<${helper.type}> list,
-            final List<FlightTarget> targets) {
+        final ${helper.type}Flights.Builder builder,
+        final List<${helper.type}> list,
+        final List<FlightTarget> targets) {
 #else
-            final ${helper.type}s.Builder builder,
-            final List<${helper.type}> list) {
+        final ${helper.type}s.Builder builder,
+        final List<${helper.type}> list) {
 #end
         Objects.requireNonNull(builder);
         Objects.requireNonNull(list);

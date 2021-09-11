@@ -8,4 +8,29 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ${type.name}Repo implements GraphQLReadOnlyRepository<${type.name}> {
 
+    private String getQuery(String filter) {
+
+        StringBuilder queryBuilder = new StringBuilder();
+
+        queryBuilder.append("query GET_$type.tableName {\r\n");
+        queryBuilder.append(" $type.tableName ");
+        if(filter != null && filter.trim().length() >= 1){
+            queryBuilder.append(filter);
+        }
+        queryBuilder.append("{\r\n");
+        queryBuilder.append("   id\r\n");
+#foreach( $field in $type.fields)
+        queryBuilder.append("   $field.tableFieldName\r\n");
+#end
+        queryBuilder.append("   is_deleted\r\n");
+        queryBuilder.append("   created_at\r\n");
+        queryBuilder.append("   created_by\r\n");
+        queryBuilder.append("   updated_at\r\n");
+        queryBuilder.append("   updated_by\r\n");
+        queryBuilder.append(" }\r\n");
+        queryBuilder.append("}\r\n");
+
+        return queryBuilder.toString();
+    }
+
 }
