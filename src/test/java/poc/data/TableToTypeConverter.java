@@ -7,7 +7,7 @@ public class TableToTypeConverter {
 
     public DataEntityType convert(final Table table) {
         final DataEntityType type = new DataEntityType(table.getName());
-        type.addDefaultFields();
+//        type.addDefaultFields();
         if (table.getColumns() == null) {
             return type;
         }

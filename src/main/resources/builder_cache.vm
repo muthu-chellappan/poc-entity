@@ -1,0 +1,75 @@
+package com.weedmaps.cache.build.helper;
+
+import java.util.List;
+#if ($helper.hasTargets())
+import java.util.Map;
+#end
+import java.util.Objects;
+
+import com.weedmaps.cache.CacheIdentifier.CacheType;
+import com.weedmaps.cache.stats.CacheStats;
+#if ($helper.transient)
+import com.weedmaps.cache.entity.${helper.type};
+import com.weedmaps.cache.entity.${helper.type}CacheTarget;
+#else
+import com.weedmaps.dataaccess.entity.${helper.type};
+#end
+#if ($helper.hasTargets())
+#if (!$helper.transient)
+import com.weedmaps.dataaccess.entity.FlightTarget;
+#end
+import com.weedmaps.dataaccess.proto.${helper.typePackage}.${helper.type}Flight;
+import com.weedmaps.dataaccess.proto.${helper.typePackage}.${helper.type}Flights;
+#else
+import com.weedmaps.dataaccess.proto.${helper.typePackage}.${helper.type}Detail;
+import com.weedmaps.dataaccess.proto.${helper.typePackage}.${helper.type}s;
+#end
+
+public class ${helper.type}BuildHelper extends AbstractBuildHelper {
+
+    public void build(
+#if ($helper.transient)
+            final ${helper.type}Flights.Builder builder,
+            final List<${helper.type}> list,
+            final List<${helper.type}CacheTarget> targets) {
+#elseif ($helper.hasTargets())
+            final ${helper.type}Flights.Builder builder,
+            final List<${helper.type}> list,
+            final List<FlightTarget> targets) {
+#else
+            final ${helper.type}s.Builder builder,
+            final List<${helper.type}> list) {
+#end
+        Objects.requireNonNull(builder);
+        Objects.requireNonNull(list);
+#if ($helper.hasTargets())
+        Objects.requireNonNull(targets);
+        final Map<Integer, List<Integer>> flights = mapByIds(targets);
+#end
+        list.forEach(item -> {
+            CacheStats.increment(CacheType.${helper.cacheType});
+#if ($helper.hasTargets())
+            final ${helper.type}Flight.Builder db = ${helper.type}Flight.newBuilder();
+            builder.addFlights(db);
+#else
+            final ${helper.type}Detail.Builder db = ${helper.type}Detail.newBuilder();
+            builder.add${helper.type}Details(db);
+#end
+#foreach ($attr in $helper.attrs)
+#if ($attr.indexOf(":") >= 0)
+            db.set${helper.getMutator($attr)}(item.get${helper.getAccessor($attr)});
+#elseif ($attr == "Active")
+            db.setActive(!item.getIsDeleted());
+#elseif ($attr.contains("Date"))
+            db.set${attr}(item.get${attr}().getTime());
+#else
+            db.set${attr}(item.get${attr}());
+#end
+#end
+#if ($helper.hasTargets())
+            db.addAll${helper.type}LinkedFlightIds(flights.get(item.getId()));
+#end
+        });
+    }
+
+}

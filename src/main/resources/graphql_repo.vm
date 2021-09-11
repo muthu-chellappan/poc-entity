@@ -1,0 +1,11 @@
+package com.weedmaps.dataaccess.repo.impl;
+
+import com.weedmaps.dataaccess.entity.${type.name};
+import com.weedmaps.dataaccess.repo.GraphQLReadOnlyRepository;
+
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class ${type.name}Repo implements GraphQLReadOnlyRepository<${type.name}> {
+
+}

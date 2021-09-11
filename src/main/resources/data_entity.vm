@@ -1,20 +1,20 @@
 package com.weedmaps.dataaccess.entity;
 
-import java.io.Serializable;
 #foreach( $import in $type.sanitizedImports)
 import ${import};
 #end
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import com.weedmaps.dataaccess.AbstractEntity;
 import com.weedmaps.dataaccess.entity.graphql.GraphQLField;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class $type.name implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+public class $type.name extends AbstractEntity {
 
     private static final long serialVersionUID = 1L;
 #foreach( $field in $type.fields)
