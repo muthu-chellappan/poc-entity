@@ -3,16 +3,22 @@ package com.weedmaps.dataaccess.repo.impl;
 import com.weedmaps.dataaccess.entity.${type.name};
 import com.weedmaps.dataaccess.repo.GraphQLReadOnlyRepository;
 
+import java.util.Date;
+import java.util.List;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Repository;
 
+@Slf4j
 @Repository
 public class ${type.name}Repo implements GraphQLReadOnlyRepository<${type.name}> {
 
-    private String getQuery(String filter) {
+    private String getQuery(String name, String filter) {
 
         StringBuilder queryBuilder = new StringBuilder();
 
-        queryBuilder.append("query GET_$type.tableName {\r\n");
+        queryBuilder.append("query GET_${type.tableName}_" + name +" {\r\n");
         queryBuilder.append(" $type.tableName ");
         if(filter != null && filter.trim().length() >= 1){
             queryBuilder.append(filter);
@@ -32,5 +38,45 @@ public class ${type.name}Repo implements GraphQLReadOnlyRepository<${type.name}>
 
         return queryBuilder.toString();
     }
+
+    public List<$type.name> getAll${type.name}s(){
+        String query = getQuery("All", ""); // no fiter
+        log.info("get All Queries for $type.name is \n {}", query);
+        
+        
+        //Steps 
+        // Execute the above query
+        // Map to Java entity country
+        
+        
+        return null;
+    } 
+    
+    public List<$type.name> getActive${type.name}s(){
+        String query = getQuery("Active", "(where: {is_deleted: {_eq: false}})");
+        log.info("get Active Queries for $type.name is \n {}", query);
+        
+        //Steps 
+        // Execute the above query
+        // Map to Java entity country
+        
+        
+        return null;
+    } 
+
+    public List<$type.name> getActive${type.name}sAfter(Date lastModified){
+        String lastModifiedDate = YYYY_MM_DD_FORMATTER.format(lastModified);
+        String query = getQuery("UpdatedAfter",
+                "(where: {is_deleted: {_eq: false}, updated_at: {_gte: \"" + lastModifiedDate + "\"}})");
+
+        log.info("get Active Queries for ${type.name} modified after {} is \n {}", lastModified, query);
+        
+        //Steps 
+        // Execute the above query
+        // Map to Java entity country
+        
+        
+        return null;
+    } 
 
 }
