@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import lombok.Data;
+import poc.sql.Query;
 
 @SuppressWarnings({ "rawtypes" })
 @Data
@@ -16,9 +17,21 @@ public class DataEntityType {
     private final List<DataEntityField> fields = new ArrayList<>();
     private final Set<Class> imports = new HashSet<>();
     private final String tableName;
+    private final List<Query> queries;
 
     public String getName() {
         return conventionalTypeName(name);
+    }
+
+    public String getEntity() {
+        return name;
+    }
+
+    public String getPlural() {
+        if (name.endsWith("y")) {
+            return name.substring(0, name.length() - 1) + "ies";
+        }
+        return name + "s";
     }
 
     public static String conventionalTypeName(final String name) {

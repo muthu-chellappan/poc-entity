@@ -1,8 +1,10 @@
 package poc.sql;
 
-public enum WmAdTable {
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-//    DEVICE_MAKE("device_make2", null, null, null);
+public enum WmAdTable {
 
     CONTINENT("continent",
             new String[] { "name#VARCHAR(100)#false" },
@@ -21,13 +23,13 @@ public enum WmAdTable {
             new String[] { "code#UNIQUE#code" },
             new String[] { "country_id#country#id" }),
     CITY("city",
-            new String[] { "name#VARCHAR(100)#false", "code#VARCHAR(3)", "country_id#INT#false" },
+            new String[] { "name#VARCHAR(100)#false", "code#VARCHAR(3)", "region_id#INT#false" },
             new String[] { "code#UNIQUE#code" },
-            new String[] { "country_id#country#id" }),
+            new String[] { "region_id#region#id" }),
     POSTAL_CODE("postal_code",
-            new String[] { "code#VARCHAR(100)#false", "description#VARCHAR(100)", "country_id#INT#false" },
+            new String[] { "code#VARCHAR(100)#false", "description#VARCHAR(100)", "city_id#INT#false" },
             new String[] { "code#UNIQUE#code" },
-            new String[] { "country_id#country#id" }),
+            new String[] { "city_id#city#id" }),
     CURRENCY("currency",
             new String[] { "name#VARCHAR(100)#false", "code#VARCHAR(3)#false", "country_id#INT#false" },
             null,
@@ -36,11 +38,6 @@ public enum WmAdTable {
             new String[] { "name#VARCHAR(100)#false", "code#VARCHAR(3)#false", "utc_offset#INT#false" },
             new String[] { "name#UNIQUE#name", "code#UNIQUE#code" },
             null),
-//    LOCALE("locale",
-//            new String[] { "code#VARCHAR(5)#false", "description#VARCHAR(100)", "decimal_notation#CHAR(1)",
-//                    "kilo_separator#CHAR(1)" },
-//            new String[] { "code#UNIQUE#code" },
-//            null),
     IAB_CATEGORY("iab_category",
             new String[] { "name#VARCHAR(100)#false", "code#VARCHAR(10)#false", "description#VARCHAR(500)" },
             new String[] { "code#UNIQUE#code" },
@@ -67,28 +64,10 @@ public enum WmAdTable {
             new String[] { "name#VARCHAR(100)#false", "description#VARCHAR(500)" },
             new String[] { "name#UNIQUE#name" },
             null),
-//    BROWSER_VERSION("browser_version",
-//            new String[] { "name#VARCHAR(100)", "version#VARCHAR(100)#false", "description#VARCHAR(500)",
-//                    "browser_id#INT#false" },
-//            new String[] { "version_browser_id#UNIQUE#version,browser_id" },
-//            new String[] { "browser_id#browser#id" }),
-//    DELIVERY_POINT("devliery_point",
-//            new String[] { "name#VARCHAR(100)#false", "description#VARCHAR(500)" },
-//            null,
-//            null),
     OS("os",
             new String[] { "name#VARCHAR(100)#false", "description#VARCHAR(500)" },
             new String[] { "name#UNIQUE#name" },
             null),
-//    OS_VERSION("os_version",
-//            new String[] { "name#VARCHAR(100)", "version#VARCHAR(100)#false", "description#VARCHAR(500)",
-//                    "os_id#INT#false" },
-//            new String[] { "version_od_id#UNIQUE#version,os_id" },
-//            new String[] { "os_id#os#id" }),
-//    AD_UNIT("ad_unit",
-//            new String[] { "ad_format#VARCHAR(100)#false", "ad_type#VARCHAR(100)#false" },
-//            new String[] { "ad_format_ad_type#UNIQUE#ad_format,ad_type" },
-//            null),
     AD_ZONE("ad_zone",
             new String[] { "name#VARCHAR(100)#false", "description#VARCHAR(500)" },
             new String[] { "name#UNIQUE#name" },
@@ -105,18 +84,6 @@ public enum WmAdTable {
             new String[] { "name#VARCHAR(100)#false"},
             new String[] { "name#UNIQUE#name" },
             null),
-//    SALES_COUNTRY("sales_country",
-//            new String[] { "country_id#INT#false" },
-//            new String[] { "country_id#UNIQUE#country_id" },
-//            new String[] { "country_id#country#id" }),
-//    SALES_REGION("sales_region",
-//            new String[] { "name#VARCHAR(100)#false", "description#VARCHAR(500)", "country_id#INT#false" },
-//            new String[] { "name#UNIQUE#name" },
-//            new String[] { "country_id#country#id" }),
-//    SALES_CITY("sales_city",
-//            new String[] { "city_id#INT#false" },
-//            new String[] { "city_id#UNIQUE#city_id" },
-//            new String[] { "city_id#city#id" }),
     PACING_TYPE("pacing_type",
             new String[] { "name#VARCHAR(100)#false", "type#VARCHAR(100)#false" },
             new String[] { "type#UNIQUE#type" },
@@ -125,10 +92,6 @@ public enum WmAdTable {
             new String[] { "name#VARCHAR(100)#false", "type#VARCHAR(100)#false" },
             new String[] { "type#UNIQUE#type" },
             null),
-//    OPTIMIZATION_GOAL_TYPE("optimization_goal_type",
-//            new String[] { "name#VARCHAR(100)#false", "type#VARCHAR(100)#false" },
-//            new String[] { "type#UNIQUE#type" },
-//            null),
     FREQ_CAP_INTERVAL_TYPE("freq_cap_interval_type",
             new String[] { "name#VARCHAR(100)#false", "type#VARCHAR(100)#false" },
             new String[] { "type#UNIQUE#type" },
@@ -137,10 +100,6 @@ public enum WmAdTable {
             new String[] { "code#VARCHAR(10)#false", "description#VARCHAR(500)" },
             new String[] { "code#UNIQUE#code" },
             null),
-//    BUDGET_TYPE("budget_type",
-//            new String[] { "name#VARCHAR(100)#false", "description#VARCHAR(500)" },
-//            null,
-//            null),
     ACCOUNT_TYPE("account_type",
             new String[] { "name#VARCHAR(100)#false", "description#VARCHAR(500)" },
             null,
@@ -166,10 +125,6 @@ public enum WmAdTable {
                     "creative_markup#VARCHAR(4000)", "creative_format_id#INT#false", "advertisement_id#INT#false" },
             null,
             new String[] { "creative_format_id#creative_format#id", "advertisement_id#advertisement#id" }),
-//    DEAL_PRICING_TYPE("deal_pricing_type",
-//            new String[] { "name#VARCHAR(100)#false" },
-//            null,
-//            null),
     DEAL_TYPE("deal_type",
             new String[] { "type#VARCHAR(15)#false" },
             new String[] { "type#UNIQUE#type" },
@@ -261,7 +216,17 @@ public enum WmAdTable {
             new String[] { "sales_country_id#INT", "sales_region_id#INT", "sales_city_id#INT", "sales_postal_code_id#INT" },
             new String[] { "sales_country_region_city_pc#UNIQUE#sales_country_id,sales_region_id,sales_city_id,sales_postal_code_id" },
             new String[] { "sales_country_id#country#id", "sales_region_id#region#id",
-                    "sales_city_id#city#id", "sales_postal_code_id#postal_code#id" }),
+                    "sales_city_id#city#id", "sales_postal_code_id#postal_code#id" }) {
+        public List<Query> getQueries() {
+            final List<Query> queries = new ArrayList<>();
+            queries.add(new Query("ActiveGeoTargetByCountryIdsOrRegionIdsOrCityIdsOrPostalIds",
+                    "(where: {is_deleted: {_eq: false}, _or: {sales_city_id: {_in: \" + cityIds\r\n"
+                    + "                        + \"}, sales_country_id: {_in: \" + countryIds + \"}, sales_region_id: {_in: \" + regionIds\r\n"
+                    + "                        + \"}}})",
+                    "cityIds", "regionIds", "countryIds"));
+            return queries;
+        }
+    },
     DEVICE_TARGET("device_target",
             new String[] { "device_type_id#INT#false","device_make_id#INT#false", "device_model_id#INT#false" },
             new String[] { "device_type_make_model_type#UNIQUE#device_type_id,device_make_id,device_model_id" },
@@ -333,15 +298,20 @@ public enum WmAdTable {
         addCols(table);
         addCons(table);
         addKeys(table);
+        addQueries(table);
         return table;
     }
-    
+
     public String getName() {
-    	return this.name;
+        return this.name;
     }
-    
+
     public String[] getCols() {
-    	return this.cols;
+        return this.cols;
+    }
+
+    public List<Query> getQueries() {
+        return Collections.emptyList();
     }
 
     private void addCols(final Table table) {
@@ -378,6 +348,10 @@ public enum WmAdTable {
             final Key k = new Key(tokens[0], tokens[1], tokens[2]);
             table.add(k);
         }
+    }
+
+    private void addQueries(final Table table) {
+        table.addQueries(getQueries());
     }
 
 }

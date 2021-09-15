@@ -14,6 +14,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ${type.name}Repo implements GraphQLReadOnlyRepository<${type.name}> {
 
+    private static final String ENTITY = ${type.name}.getEntityName();
+
     private String getQuery(String name, String filter) {
 
         StringBuilder queryBuilder = new StringBuilder();
@@ -39,44 +41,45 @@ public class ${type.name}Repo implements GraphQLReadOnlyRepository<${type.name}>
         return queryBuilder.toString();
     }
 
-    public List<$type.name> getAll${type.name}s(){
-        String query = getQuery("All", ""); // no fiter
-        log.info("get All Queries for $type.name is \n {}", query);
-        
-        
-        //Steps 
-        // Execute the above query
-        // Map to Java entity country
-        
-        
-        return null;
-    } 
-    
-    public List<$type.name> getActive${type.name}s(){
-        String query = getQuery("Active", "(where: {is_deleted: {_eq: false}})");
-        log.info("get Active Queries for $type.name is \n {}", query);
-        
-        //Steps 
-        // Execute the above query
-        // Map to Java entity country
-        
-        
-        return null;
+    public List<$type.name> getAll${type.plural}(){
+        final String query = "All";
+        final String filter = "";
+        log.debug("Fetching query for ${type.name}(s): {} with filter: {}", query, filter);
+        return execute(query, filter, ENTITY, ${type.name}.class);
     } 
 
-    public List<$type.name> getActive${type.name}sAfter(Date lastModified){
+    public List<$type.name> getActive${type.plural}(){
+        final String query = "Active";
+        final String filter = "(where: {is_deleted: {_eq: false}})";
+        log.debug("Fetching query for ${type.name}(s): {} with filter: {}", query, filter);
+        return execute(query, filter, ENTITY, ${type.name}.class);
+    } 
+
+    public List<$type.name> getActive${type.plural}After(Date lastModified){
         String lastModifiedDate = YYYY_MM_DD_FORMATTER.format(lastModified);
-        String query = getQuery("UpdatedAfter",
-                "(where: {is_deleted: {_eq: false}, updated_at: {_gte: \"" + lastModifiedDate + "\"}})");
-
-        log.info("get Active Queries for ${type.name} modified after {} is \n {}", lastModified, query);
-        
-        //Steps 
-        // Execute the above query
-        // Map to Java entity country
-        
-        
-        return null;
+        final String query = "UpdatedAfter";
+        final String filter = "(where: {is_deleted: {_eq: false}, updated_at: {_gte: \"" + lastModifiedDate + "\"}})";
+        log.debug("Fetching query for ${type.name}(s): {} with filter: {}", query, filter);
+        return execute(query, filter, ENTITY, ${type.name}.class);
     } 
+
+#foreach( $query in $type.queries )
+    public List<$type.name> get${query.name}(
+#foreach( $field in $query.fields )
+#if ( $velocityCount < $query.fields.size() )
+            final List<Integer> ${field},
+#else
+            final List<Integer> ${field}) {
+#end
+#end
+#foreach( $field in $query.fields )
+        Objects.requireNonNull($field);
+#end
+        final String query = "${query.name}";
+        final String filter = "${query.filter}";
+        log.debug("Fetching query for ${type.name}(s): {} with filter: {}", query, filter);
+        return execute(query, filter, ENTITY, ${type.name}.class);
+    }
+#end
 
 }

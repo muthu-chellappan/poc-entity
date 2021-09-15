@@ -14,6 +14,7 @@ public class Table {
     private final List<Column> columns = new ArrayList<>();
     private final List<Constraint> constraints = new ArrayList<>();
     private final List<Key> keys = new ArrayList<>();
+    private final List<Query> queries = new ArrayList<>();
 
     public void add(final Column column) {
         if (column == null) {
@@ -38,6 +39,10 @@ public class Table {
 
     public void addColumnValue(final Column column, final String value) {
         column.addValue(value);
+    }
+
+    public void addQueries(final List<Query> queries) {
+        this.queries.addAll(queries);
     }
 
 }
