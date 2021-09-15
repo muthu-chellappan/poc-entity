@@ -28,10 +28,11 @@ public class DataEntityType {
     }
 
     public String getPlural() {
-        if (name.endsWith("y")) {
-            return name.substring(0, name.length() - 1) + "ies";
+        String pluralName = getName();
+        if (pluralName.endsWith("y")) {
+            return pluralName.substring(0, pluralName.length() - 1) + "ies";
         }
-        return name + "s";
+        return pluralName + "s";
     }
 
     public static String conventionalTypeName(final String name) {

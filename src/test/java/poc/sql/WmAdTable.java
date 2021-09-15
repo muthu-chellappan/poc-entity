@@ -17,19 +17,51 @@ public enum WmAdTable {
     STATE("state",
             new String[] { "name#VARCHAR(100)#false", "code#VARCHAR(3)", "country_id#INT#false" },
             new String[] { "code#UNIQUE#code" },
-            new String[] { "country_id#country#id" }),
+            new String[] { "country_id#country#id" }){
+        public List<Query> getQueries() {
+            final List<Query> queries = new ArrayList<>();
+            queries.add(new Query("ActiveStatesByCountryIds",
+                    "(where: {is_deleted: {_eq: false}, country_id: {_in: \" + countryIds + \"}})",
+                    "countryIds"));
+            return queries;
+        }
+    },
     REGION("region",
             new String[] { "name#VARCHAR(100)#false", "code#VARCHAR(3)", "country_id#INT#false" },
             new String[] { "code#UNIQUE#code" },
-            new String[] { "country_id#country#id" }),
+            new String[] { "country_id#country#id" }){
+        public List<Query> getQueries() {
+            final List<Query> queries = new ArrayList<>();
+            queries.add(new Query("ActiveRegionsByCountryIds",
+                    "(where: {is_deleted: {_eq: false}, country_id: {_in: \" + countryIds + \"}})",
+                    "countryIds"));
+            return queries;
+        }
+    },
     CITY("city",
             new String[] { "name#VARCHAR(100)#false", "code#VARCHAR(3)", "region_id#INT#false" },
             new String[] { "code#UNIQUE#code" },
-            new String[] { "region_id#region#id" }),
+            new String[] { "region_id#region#id" }){
+        public List<Query> getQueries() {
+            final List<Query> queries = new ArrayList<>();
+            queries.add(new Query("ActiveCitiesByRegionIds",
+                    "(where: {is_deleted: {_eq: false}, region_id: {_in: \" + regionIds + \"}})",
+                    "regionIds"));
+            return queries;
+        }
+    },
     POSTAL_CODE("postal_code",
             new String[] { "code#VARCHAR(100)#false", "description#VARCHAR(100)", "city_id#INT#false" },
             new String[] { "code#UNIQUE#code" },
-            new String[] { "city_id#city#id" }),
+            new String[] { "city_id#city#id" }){
+        public List<Query> getQueries() {
+            final List<Query> queries = new ArrayList<>();
+            queries.add(new Query("ActivePostalsByCityIds",
+                    "(where: {is_deleted: {_eq: false}, city_id: {_in: \" + cityIds + \"}})",
+                    "cityIds"));
+            return queries;
+        }
+    },
     CURRENCY("currency",
             new String[] { "name#VARCHAR(100)#false", "code#VARCHAR(3)#false", "country_id#INT#false" },
             null,
@@ -54,12 +86,28 @@ public enum WmAdTable {
     DEVICE_MAKE("device_make",
             new String[] { "make#VARCHAR(100)#false", "brand#VARCHAR(100)", "device_type_id#INT#false" },
             new String[] { "make_brand#UNIQUE#make,brand" },
-            new String[] { "device_type_id#device_type#id" }),
+            new String[] { "device_type_id#device_type#id" }){
+        public List<Query> getQueries() {
+            final List<Query> queries = new ArrayList<>();
+            queries.add(new Query("ActiveDeviceMakesByDeviceTypeIds",
+                    "(where: {is_deleted: {_eq: false}, device_type_id: {_in: \" + deviceTypeIds + \"}})",
+                    "deviceTypeIds"));
+            return queries;
+        }
+    },
     DEVICE_MODEL("device_model",
             new String[] { "name#VARCHAR(100)#false", "model#VARCHAR(100)#false", "description#VARCHAR(500)",
                     "device_make_id#INT#false" },
             new String[] { "model_device_id#UNIQUE#model,device_make_id" },
-            new String[] { "device_make_id#device_make#id" }),
+            new String[] { "device_make_id#device_make#id" }){
+        public List<Query> getQueries() {
+            final List<Query> queries = new ArrayList<>();
+            queries.add(new Query("ActiveDeviceModelsByDeviceMakeIds",
+                    "(where: {is_deleted: {_eq: false}, device_make_id: {_in: \" + deviceMakeIds + \"}})",
+                    "deviceMakeIds"));
+            return queries;
+        }
+    },
     BROWSER("browser",
             new String[] { "name#VARCHAR(100)#false", "description#VARCHAR(500)" },
             new String[] { "name#UNIQUE#name" },
@@ -187,31 +235,89 @@ public enum WmAdTable {
     FLIGHT_TARGET("flight_target",
             new String[] { "type#VARCHAR(100)#false", "flight_id#INT#false", "target_id#INT#false" },
             null,
-            new String[] { "flight_id#flight#id", "target_id#target#id" }),
+            new String[] { "flight_id#flight#id", "target_id#target#id" }){
+        public List<Query> getQueries() {
+            final List<Query> queries = new ArrayList<>();
+            queries.add(new Query("FlightsByTargetTypeAndIds",
+                    "(where: {is_deleted: {_eq: false}, type: {_eq: \\\"\" + type\r\n"
+                    + "                + \"\\\"}, id: {_in: \" + adZoneTargetIds + \"}})",
+                    "type", "adZoneTargetIds"));
+            return queries;
+        }
+    },
     OS_TARGET("os_target",
             new String[] { "os_id#INT#false" },
             null,
-            new String[] { "os_id#os#id"}),
+            new String[] { "os_id#os#id"}){
+        public List<Query> getQueries() {
+            final List<Query> queries = new ArrayList<>();
+            queries.add(new Query("TargetsByOsIds",
+                    "(where: {is_deleted: {_eq: false}, id: {_in: \" + osIds + \"}})",
+                    "osIds"));
+            return queries;
+        }
+    },
     BROWSER_TARGET("browser_target",
             new String[] { "browser_id#INT#false" },
             null,
-            new String[] { "browser_id#browser#id"}),
+            new String[] { "browser_id#browser#id"}){
+        public List<Query> getQueries() {
+            final List<Query> queries = new ArrayList<>();
+            queries.add(new Query("TargetsByBrowserIds",
+                    "(where: {is_deleted: {_eq: false}, id: {_in: \" + browserIds + \"}})",
+                    "browserIds"));
+            return queries;
+        }
+    },
     AD_ZONE_TARGET("ad_zone_target",
             new String[] { "ad_zone_id#INT#false" },
             null,
-            new String[] { "ad_zone_id#ad_zone#id"}),
+            new String[] { "ad_zone_id#ad_zone#id"}){
+        public List<Query> getQueries() {
+            final List<Query> queries = new ArrayList<>();
+            queries.add(new Query("TargetsByAdZoneIds",
+                    "(where: {is_deleted: {_eq: false}, id: {_in: \" + adZoneIds + \"}})",
+                    "adZoneIds"));
+            return queries;
+        }
+    },
     AD_ZONE_LOCATION_TARGET("ad_zone_location_target",
             new String[] { "ad_zone_location_id#INT#false" },
             null,
-            new String[] { "ad_zone_location_id#ad_zone_location#id"}),
+            new String[] { "ad_zone_location_id#ad_zone_location#id"}){
+        public List<Query> getQueries() {
+            final List<Query> queries = new ArrayList<>();
+            queries.add(new Query("TargetsByAdZoneLocationIds",
+                    "(where: {is_deleted: {_eq: false}, id: {_in: \" + adZoneLocationIds + \"}})",
+                    "adZoneLocationIds"));
+            return queries;
+        }
+    },
     KEYWORDS_TARGET("keywords_target",
             new String[] { "keywords_id#INT#false" },
             null,
-            new String[] { "keywords_id#keywords#id"}),
+            new String[] { "keywords_id#keywords#id"}){
+        public List<Query> getQueries() {
+            final List<Query> queries = new ArrayList<>();
+            queries.add(new Query("TargetsByKeywordsIds",
+                    "(where: {is_deleted: {_eq: false}, id: {_in: \" + keywordsIds + \"}})",
+                    "keywordsIds"));
+            return queries;
+        }
+    },
     DAY_PART_TARGET("day_part_target",
             new String[] { "day_part_id#INT#false" },
             null,
-            new String[] { "day_part_id#day_part#id"}),
+            new String[] { "day_part_id#day_part#id"}){
+        public List<Query> getQueries() {
+            final List<Query> queries = new ArrayList<>();
+            queries.add(new Query("TargetsByDayPartIds",
+                    "(where: {is_deleted: {_eq: false}, id: {_in: \" + dayPartIds + \"}})",
+                    "dayPartIds"));
+            return queries;
+            
+        }
+    },
     GEO_TARGET("geo_target",
             new String[] { "sales_country_id#INT", "sales_region_id#INT", "sales_city_id#INT", "sales_postal_code_id#INT" },
             new String[] { "sales_country_region_city_pc#UNIQUE#sales_country_id,sales_region_id,sales_city_id,sales_postal_code_id" },
@@ -223,14 +329,24 @@ public enum WmAdTable {
                     "(where: {is_deleted: {_eq: false}, _or: {sales_city_id: {_in: \" + cityIds\r\n"
                     + "                        + \"}, sales_country_id: {_in: \" + countryIds + \"}, sales_region_id: {_in: \" + regionIds\r\n"
                     + "                        + \"}}})",
-                    "cityIds", "regionIds", "countryIds"));
+                    "cityIds", "regionIds", "countryIds","postalIds"));
             return queries;
         }
     },
     DEVICE_TARGET("device_target",
             new String[] { "device_type_id#INT#false","device_make_id#INT#false", "device_model_id#INT#false" },
             new String[] { "device_type_make_model_type#UNIQUE#device_type_id,device_make_id,device_model_id" },
-            new String[] { "device_type_id#device_type#id","device_make_id#device_make#id", "device_model_id#device_model#id" }),
+            new String[] { "device_type_id#device_type#id","device_make_id#device_make#id", "device_model_id#device_model#id" }){
+        public List<Query> getQueries() {
+            final List<Query> queries = new ArrayList<>();
+            queries.add(new Query("ActiveDeviceTargetByDeviceTypeIdsOrDeviceMakeIdsOrDeviceModelIds",
+                    "(where: {is_deleted: {_eq: false}, _or: {device_type_id: {_in: \" + deviceTypeIds\r\n"
+                    + "                        + \"}, device_make_id: {_in: \" + deviceMakeIds + \"}, device_model_id: {_in: \" + deviceModelIds\r\n"
+                    + "                        + \"}}})",
+                    "deviceTypeIds", "deviceMakeIds", "deviceModelIds"));
+            return queries;
+        }
+    },
     USER("user", 
             new String[] { "fname#VARCHAR(100)#false", "mname#VARCHAR(100)", "lname#VARCHAR(100)#false", "email#VARCHAR(200)#false", 
                     "account_id#INT#false", "join_date#DATE", "last_login_date#DATE"}, 
