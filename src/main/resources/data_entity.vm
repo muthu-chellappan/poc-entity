@@ -27,4 +27,13 @@ public class $type.name extends AbstractEntity {
         return "$type.entity";
     }
 
+    public static void appendAllFields(StringBuilder builder){
+        builder.append("{\r\n");
+        AbstractEntity.appendIdField(builder);
+#foreach( $field in $type.fields)
+        builder.append("   $field.tableFieldName\r\n");
+#end
+        AbstractEntity.appendDefaultFields(builder);
+        builder.append(" }\r\n");
+    }
 }
