@@ -17,6 +17,37 @@ public class ${type.name}Repo extends GraphQLReadOnlyRepository<${type.name}> {
 
     private static final String ENTITY = ${type.name}.getEntityName();
 
+
+    protected String getCountQuery(String name, String filter) {
+        StringBuilder queryBuilder = new StringBuilder();
+
+        queryBuilder.append("query GET_${type.tableName}_" + name +" {\r\n");
+        queryBuilder.append(" ${type.tableName}_aggregate ");
+        if(filter != null && filter.trim().length() >= 1){
+            queryBuilder.append(filter);
+        }
+        queryBuilder.append("{\r\n");
+        queryBuilder.append("   aggregate {\r\n");
+        queryBuilder.append("       count\r\n");
+        queryBuilder.append("   }\r\n");
+        queryBuilder.append(" }\r\n");
+        queryBuilder.append("}\r\n");
+
+        return queryBuilder.toString();
+    }
+
+    protected String getByIdQuery(String name, Integer id) {
+
+        StringBuilder queryBuilder = new StringBuilder();
+
+        queryBuilder.append("query GET_${type.tableName}_" + name +" {\r\n");
+        queryBuilder.append(" ${type.tableName}_by_pk(id: "+ id +") ");
+        getAllFields(queryBuilder);
+        queryBuilder.append("}\r\n");
+
+        return queryBuilder.toString();
+    }
+
     protected String getQuery(String name, String filter) {
 
         StringBuilder queryBuilder = new StringBuilder();
@@ -26,6 +57,13 @@ public class ${type.name}Repo extends GraphQLReadOnlyRepository<${type.name}> {
         if(filter != null && filter.trim().length() >= 1){
             queryBuilder.append(filter);
         }
+        getAllFields(queryBuilder);
+        queryBuilder.append("}\r\n");
+
+        return queryBuilder.toString();
+    }
+
+    private void getAllFields(StringBuilder queryBuilder){
         queryBuilder.append("{\r\n");
         queryBuilder.append("   id\r\n");
 #foreach( $field in $type.fields)
@@ -37,9 +75,6 @@ public class ${type.name}Repo extends GraphQLReadOnlyRepository<${type.name}> {
         queryBuilder.append("   updated_at\r\n");
         queryBuilder.append("   updated_by\r\n");
         queryBuilder.append(" }\r\n");
-        queryBuilder.append("}\r\n");
-
-        return queryBuilder.toString();
     }
 
     public List<$type.name> getAll${type.plural}(){
@@ -64,6 +99,39 @@ public class ${type.name}Repo extends GraphQLReadOnlyRepository<${type.name}> {
         log.debug("Fetching query for ${type.name}(s): {} with filter: {}", name, filter);
         return execute(name, filter, ENTITY, ${type.name}.class);
     } 
+
+    @Override
+    public List<$type.name> findAll(){
+        return getAll${type.plural}();
+    } 
+
+    @Override
+    public List<$type.name> findAllById(Iterable<Integer> ids){
+        final String name = "AllByIds";
+        final String filter = "(where: {id: {_in: " + ids + "}})";
+        log.debug("Fetching query for ${type.name}(s): {} with filter: {}", name, filter);
+        return execute(name, filter, ENTITY, ${type.name}.class);
+    } 
+
+    @Override
+    public $type.name getOne(Integer id){
+        return getById(id);
+    } 
+
+    @Override
+    public $type.name getById(Integer id){
+        final String name = "GetById";
+        final String filter = "(where: {id: {_eq: " + id + "}})";
+        log.debug("Fetching query for ${type.name}(s): {} with filter: {}", name, filter);
+        return execute(name, id, ENTITY, ${type.name}.class);
+    } 
+    
+    @Override
+    public long count() {
+        final String name = "Count";
+        log.debug("Count query for ${type.name}(s): {} ", name);
+        return execute(name, ENTITY, ${type.name}.class);
+    }
 
 #foreach( $query in $type.queries )
     public List<$type.name> get${query.name}(
