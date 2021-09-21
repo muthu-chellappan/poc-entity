@@ -40,7 +40,7 @@ public enum CacheHelper {
     },
     GEO_FLIGHTS("Geo", true) {
         public String[] getAttrs() {
-            return new String[] { "CountryCode", "RegionCode", "CityCode", "PostalCode" };
+            return new String[] { "CountryCode", "StateCode", "CityCode", "PostalCode" };
         }
 
         public boolean isTransient() {
