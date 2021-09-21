@@ -241,7 +241,7 @@ public enum WmAdTable {
             queries.add(new Query("FlightsByTargetTypeAndIds",
                     "(where: {is_deleted: {_eq: false}, type: {_eq: \\\"\" + type\r\n"
                     + "                + \"\\\"}, id: {_in: \" + adZoneTargetIds + \"}})",
-                    "type", "adZoneTargetIds"));
+                    "String:type", "adZoneTargetIds"));
             return queries;
         }
     },
