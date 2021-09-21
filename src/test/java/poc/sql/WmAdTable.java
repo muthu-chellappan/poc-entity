@@ -6,14 +6,18 @@ import java.util.List;
 
 public enum WmAdTable {
 
-    CONTINENT("continent",
-            new String[] { "name#VARCHAR(100)#false" },
-            new String[] { "name#UNIQUE#name" },
-            null),
+//    CONTINENT("continent",
+//            new String[] { "name#VARCHAR(100)#false" },
+//            new String[] { "name#UNIQUE#name" },
+//            null),
+//    COUNTRY("country",
+//            new String[] { "name#VARCHAR(100)#false", "code#VARCHAR(3)#false", "continent_id#INT#false" },
+//            new String[] { "name#UNIQUE#name", "code#UNIQUE#code" },
+//            new String[] { "continent_id#continent#id" }),
     COUNTRY("country",
-            new String[] { "name#VARCHAR(100)#false", "code#VARCHAR(3)#false", "continent_id#INT#false" },
+            new String[] { "name#VARCHAR(100)#false", "code#VARCHAR(3)#false"},
             new String[] { "name#UNIQUE#name", "code#UNIQUE#code" },
-            new String[] { "continent_id#continent#id" }),
+            null),
     STATE("state",
             new String[] { "name#VARCHAR(100)#false", "code#VARCHAR(3)", "country_id#INT#false" },
             new String[] { "code#UNIQUE#code" },
@@ -26,27 +30,27 @@ public enum WmAdTable {
             return queries;
         }
     },
-    REGION("region",
-            new String[] { "name#VARCHAR(100)#false", "code#VARCHAR(3)", "country_id#INT#false" },
-            new String[] { "code#UNIQUE#code" },
-            new String[] { "country_id#country#id" }){
-        public List<Query> getQueries() {
-            final List<Query> queries = new ArrayList<>();
-            queries.add(new Query("ActiveRegionsByCountryIds",
-                    "(where: {is_deleted: {_eq: false}, country_id: {_in: \" + countryIds + \"}})",
-                    "countryIds"));
-            return queries;
-        }
-    },
+//    REGION("region",
+//            new String[] { "name#VARCHAR(100)#false", "code#VARCHAR(3)", "country_id#INT#false" },
+//            new String[] { "code#UNIQUE#code" },
+//            new String[] { "country_id#country#id" }){
+//        public List<Query> getQueries() {
+//            final List<Query> queries = new ArrayList<>();
+//            queries.add(new Query("ActiveRegionsByCountryIds",
+//                    "(where: {is_deleted: {_eq: false}, country_id: {_in: \" + countryIds + \"}})",
+//                    "countryIds"));
+//            return queries;
+//        }
+//    },
     CITY("city",
-            new String[] { "name#VARCHAR(100)#false", "code#VARCHAR(3)", "region_id#INT#false" },
+            new String[] { "name#VARCHAR(100)#false", "code#VARCHAR(3)", "state_id#INT#false" },
             new String[] { "code#UNIQUE#code" },
-            new String[] { "region_id#region#id" }){
+            new String[] { "state_id#state#id" }){
         public List<Query> getQueries() {
             final List<Query> queries = new ArrayList<>();
-            queries.add(new Query("ActiveCitiesByRegionIds",
-                    "(where: {is_deleted: {_eq: false}, region_id: {_in: \" + regionIds + \"}})",
-                    "regionIds"));
+            queries.add(new Query("ActiveCitiesByStateIds",
+                    "(where: {is_deleted: {_eq: false}, state_id: {_in: \" + stateIds + \"}})",
+                    "stateIds"));
             return queries;
         }
     },
@@ -62,6 +66,14 @@ public enum WmAdTable {
             return queries;
         }
     },
+    SALES_REGION("sales_region",
+            new String[] { "name#VARCHAR(100)#false", "code#VARCHAR(3)"},
+            new String[] { "code#UNIQUE#code" },
+            null),
+    BRAND_REGION("brand_region",
+            new String[] { "name#VARCHAR(100)#false", "code#VARCHAR(3)"},
+            new String[] { "code#UNIQUE#code" },
+            null),
     CURRENCY("currency",
             new String[] { "name#VARCHAR(100)#false", "code#VARCHAR(3)#false", "country_id#INT#false" },
             null,
@@ -252,7 +264,7 @@ public enum WmAdTable {
         public List<Query> getQueries() {
             final List<Query> queries = new ArrayList<>();
             queries.add(new Query("TargetsByOsIds",
-                    "(where: {is_deleted: {_eq: false}, id: {_in: \" + osIds + \"}})",
+                    "(where: {is_deleted: {_eq: false}, os_id: {_in: \" + osIds + \"}})",
                     "osIds"));
             return queries;
         }
@@ -264,7 +276,7 @@ public enum WmAdTable {
         public List<Query> getQueries() {
             final List<Query> queries = new ArrayList<>();
             queries.add(new Query("TargetsByBrowserIds",
-                    "(where: {is_deleted: {_eq: false}, id: {_in: \" + browserIds + \"}})",
+                    "(where: {is_deleted: {_eq: false}, browser_id: {_in: \" + browserIds + \"}})",
                     "browserIds"));
             return queries;
         }
@@ -276,7 +288,7 @@ public enum WmAdTable {
         public List<Query> getQueries() {
             final List<Query> queries = new ArrayList<>();
             queries.add(new Query("TargetsByAdZoneIds",
-                    "(where: {is_deleted: {_eq: false}, id: {_in: \" + adZoneIds + \"}})",
+                    "(where: {is_deleted: {_eq: false}, ad_zone_id: {_in: \" + adZoneIds + \"}})",
                     "adZoneIds"));
             return queries;
         }
@@ -288,7 +300,7 @@ public enum WmAdTable {
         public List<Query> getQueries() {
             final List<Query> queries = new ArrayList<>();
             queries.add(new Query("TargetsByAdZoneLocationIds",
-                    "(where: {is_deleted: {_eq: false}, id: {_in: \" + adZoneLocationIds + \"}})",
+                    "(where: {is_deleted: {_eq: false}, ad_zone_location_id: {_in: \" + adZoneLocationIds + \"}})",
                     "adZoneLocationIds"));
             return queries;
         }
@@ -300,7 +312,7 @@ public enum WmAdTable {
         public List<Query> getQueries() {
             final List<Query> queries = new ArrayList<>();
             queries.add(new Query("TargetsByKeywordsIds",
-                    "(where: {is_deleted: {_eq: false}, id: {_in: \" + keywordsIds + \"}})",
+                    "(where: {is_deleted: {_eq: false}, keywords_id: {_in: \" + keywordsIds + \"}})",
                     "keywordsIds"));
             return queries;
         }
@@ -312,24 +324,50 @@ public enum WmAdTable {
         public List<Query> getQueries() {
             final List<Query> queries = new ArrayList<>();
             queries.add(new Query("TargetsByDayPartIds",
-                    "(where: {is_deleted: {_eq: false}, id: {_in: \" + dayPartIds + \"}})",
+                    "(where: {is_deleted: {_eq: false}, day_part_target_id: {_in: \" + dayPartIds + \"}})",
                     "dayPartIds"));
             return queries;
             
         }
     },
+    SALES_REGION_TARGET("sales_region_target",
+            new String[] { "sales_region_id#INT#false" },
+            null,
+            new String[] { "sales_region_id#sales_region#id"}){
+        public List<Query> getQueries() {
+            final List<Query> queries = new ArrayList<>();
+            queries.add(new Query("TargetsBySalesRegionIds",
+                    "(where: {is_deleted: {_eq: false}, sales_region_id: {_in: \" + salesRegionIds + \"}})",
+                    "salesRegionIds"));
+            return queries;
+            
+        }
+    },
+    BRAND_REGION_TARGET("brand_region_target",
+            new String[] { "brand_region_id#INT#false" },
+            null,
+            new String[] { "brand_region_id#brand_region#id"}){
+        public List<Query> getQueries() {
+            final List<Query> queries = new ArrayList<>();
+            queries.add(new Query("TargetsByBrandRegionIds",
+                    "(where: {is_deleted: {_eq: false}, brand_region_id: {_in: \" + brandRegionIds + \"}})",
+                    "brandRegionIds"));
+            return queries;
+            
+        }
+    },
     GEO_TARGET("geo_target",
-            new String[] { "sales_country_id#INT", "sales_region_id#INT", "sales_city_id#INT", "sales_postal_code_id#INT" },
-            new String[] { "sales_country_region_city_pc#UNIQUE#sales_country_id,sales_region_id,sales_city_id,sales_postal_code_id" },
-            new String[] { "sales_country_id#country#id", "sales_region_id#region#id",
+            new String[] { "sales_country_id#INT", "sales_state_id#INT", "sales_city_id#INT", "sales_postal_code_id#INT" },
+            new String[] { "sales_country_state_city_pc#UNIQUE#sales_country_id,sales_state_id,sales_city_id,sales_postal_code_id" },
+            new String[] { "sales_country_id#country#id", "sales_state_id#state#id",
                     "sales_city_id#city#id", "sales_postal_code_id#postal_code#id" }) {
         public List<Query> getQueries() {
             final List<Query> queries = new ArrayList<>();
-            queries.add(new Query("ActiveGeoTargetByCountryIdsOrRegionIdsOrCityIdsOrPostalIds",
+            queries.add(new Query("ActiveGeoTargetByCountryIdsOrStateIdsOrCityIdsOrPostalIds",
                     "(where: {is_deleted: {_eq: false}, _or: {sales_city_id: {_in: \" + cityIds\r\n"
-                    + "                        + \"}, sales_country_id: {_in: \" + countryIds + \"}, sales_region_id: {_in: \" + regionIds\r\n"
+                    + "                        + \"}, sales_country_id: {_in: \" + countryIds + \"}, sales_state_id: {_in: \" + stateIds\r\n"
                     + "                        + \"}}})",
-                    "cityIds", "regionIds", "countryIds","postalIds"));
+                    "cityIds", "stateIds", "countryIds","postalIds"));
             return queries;
         }
     },
