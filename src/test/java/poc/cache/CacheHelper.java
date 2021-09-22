@@ -19,6 +19,16 @@ public enum CacheHelper {
             return new String[] {"Name"};
         }
     },
+    SALES_REGION_FLIGHTS("SalesRegion", true) {
+        public String[] getAttrs() {
+            return new String[] {"Name"};
+        }
+    },
+    BRAND_REGION_FLIGHTS("BrandRegion", true) {
+        public String[] getAttrs() {
+            return new String[] {"Name"};
+        }
+    },
     AD_ZONE_LOCATION_FLIGHTS("AdZoneLocation", true) {
         public String[] getAttrs() {
             return new String[] {"Name"};

@@ -365,9 +365,9 @@ public enum WmAdTable {
             final List<Query> queries = new ArrayList<>();
             queries.add(new Query("ActiveGeoTargetByCountryIdsOrStateIdsOrCityIdsOrPostalIds",
                     "(where: {is_deleted: {_eq: false}, _or: {sales_city_id: {_in: \" + cityIds\r\n"
-                    + "                        + \"}, sales_country_id: {_in: \" + countryIds + \"}, sales_state_id: {_in: \" + stateIds\r\n"
-                    + "                        + \"}}})",
-                    "cityIds", "stateIds", "countryIds","postalIds"));
+                            + "                        + \"}, sales_country_id: {_in: \" + countryIds + \"}, sales_postal_code_id: {_in: \" + postalIds + \"}, sales_state_id: {_in: \" + stateIds\r\n"
+                            + "                        + \"}}})",
+                    "cityIds", "stateIds", "countryIds", "postalIds"));
             return queries;
         }
     },
