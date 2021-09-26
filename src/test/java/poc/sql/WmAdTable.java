@@ -6,14 +6,6 @@ import java.util.List;
 
 public enum WmAdTable {
 
-//    CONTINENT("continent",
-//            new String[] { "name#VARCHAR(100)#false" },
-//            new String[] { "name#UNIQUE#name" },
-//            null),
-//    COUNTRY("country",
-//            new String[] { "name#VARCHAR(100)#false", "code#VARCHAR(3)#false", "continent_id#INT#false" },
-//            new String[] { "name#UNIQUE#name", "code#UNIQUE#code" },
-//            new String[] { "continent_id#continent#id" }),
     COUNTRY("country",
             new String[] { "name#VARCHAR(100)#false", "code#VARCHAR(3)#false"},
             new String[] { "name#UNIQUE#name", "code#UNIQUE#code" },
@@ -30,18 +22,6 @@ public enum WmAdTable {
             return queries;
         }
     },
-//    REGION("region",
-//            new String[] { "name#VARCHAR(100)#false", "code#VARCHAR(3)", "country_id#INT#false" },
-//            new String[] { "code#UNIQUE#code" },
-//            new String[] { "country_id#country#id" }){
-//        public List<Query> getQueries() {
-//            final List<Query> queries = new ArrayList<>();
-//            queries.add(new Query("ActiveRegionsByCountryIds",
-//                    "(where: {is_deleted: {_eq: false}, country_id: {_in: \" + countryIds + \"}})",
-//                    "countryIds"));
-//            return queries;
-//        }
-//    },
     CITY("city",
             new String[] { "name#VARCHAR(100)#false", "code#VARCHAR(3)", "state_id#INT#false" },
             new String[] { "code#UNIQUE#code" },
@@ -136,8 +116,16 @@ public enum WmAdTable {
             new String[] { "name#VARCHAR(100)#false", "description#VARCHAR(500)" },
             new String[] { "name#UNIQUE#name" },
             null),
-    KEYWORDS("keywords",
-            new String[] { "keyword#VARCHAR(500)#false", "delimiter#VARCHAR(5)#false" },
+    KEYWORD_CATEGORY("keyword_category",
+            new String[] { "name#VARCHAR(500)#false", "keyword#VARCHAR(500)#false", "is_published#BOOLEAN", "group_name#VARCHAR(500)", "mutually_exclusive#BOOLEAN" },
+            new String[] { "keyword#UNIQUE#keyword" },
+            null),
+    KEYWORD_BRAND("keyword_brand",
+            new String[] { "name#VARCHAR(500)#false", "keyword#VARCHAR(500)#false", "is_published#BOOLEAN", "is_premium#BOOLEAN" },
+            new String[] { "keyword#UNIQUE#keyword" },
+            null),
+    KEYWORD_TAG("keyword_tag",
+            new String[] { "name#VARCHAR(500)#false", "keyword#VARCHAR(500)#false", "is_published#BOOLEAN", "tag_group#VARCHAR(500)" },
             new String[] { "keyword#UNIQUE#keyword" },
             null),
     DAY_PART("day_part",
@@ -306,14 +294,14 @@ public enum WmAdTable {
         }
     },
     KEYWORDS_TARGET("keywords_target",
-            new String[] { "keywords_id#INT#false" },
+            new String[] { "keyword_id#INT#false", "keyword_type#VARCHAR(50)#false" },
             null,
-            new String[] { "keywords_id#keywords#id"}){
+            null){
         public List<Query> getQueries() {
             final List<Query> queries = new ArrayList<>();
-            queries.add(new Query("TargetsByKeywordsIds",
-                    "(where: {is_deleted: {_eq: false}, keywords_id: {_in: \" + keywordsIds + \"}})",
-                    "keywordsIds"));
+            queries.add(new Query("TargetsByKeywordTypeAndIds",
+                    "(where: {is_deleted: {_eq: false}, type: {_eq: \" + type + \"}, keyword_id: {_in: \" + keywordIds + \"}})",
+                     "String:type", "keywordIds"));
             return queries;
         }
     },

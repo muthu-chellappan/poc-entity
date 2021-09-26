@@ -57,9 +57,13 @@ public enum CacheHelper {
             return true;
         }
     },
-    KEYWORDS_FLIGHTS("Keywords", true) {
+    KEYWORDS_FLIGHTS("Keyword", true) {
         public String[] getAttrs() {
             return new String[] { "Keyword" };
+        }
+
+        public boolean isTransient() {
+            return true;
         }
     },
     OS_FLIGHTS("Os", true) {
