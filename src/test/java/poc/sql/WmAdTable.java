@@ -46,14 +46,6 @@ public enum WmAdTable {
             return queries;
         }
     },
-    SALES_REGION("sales_region",
-            new String[] { "name#VARCHAR(100)#false", "code#VARCHAR(3)"},
-            new String[] { "code#UNIQUE#code" },
-            null),
-    BRAND_REGION("brand_region",
-            new String[] { "name#VARCHAR(100)#false", "code#VARCHAR(3)"},
-            new String[] { "code#UNIQUE#code" },
-            null),
     CURRENCY("currency",
             new String[] { "name#VARCHAR(100)#false", "code#VARCHAR(3)#false", "country_id#INT#false" },
             null,
@@ -128,6 +120,14 @@ public enum WmAdTable {
             new String[] { "name#VARCHAR(500)#false", "keyword#VARCHAR(500)#false", "is_published#BOOLEAN", "tag_group#VARCHAR(500)" },
             new String[] { "keyword#UNIQUE#keyword" },
             null),
+    SALES_REGION("sales_region",
+            new String[] { "name#VARCHAR(500)#false", "keyword#VARCHAR(500)#false"},
+            new String[] { "keyword#UNIQUE#keyword" },
+            null),
+    BRAND_REGION("brand_region",
+            new String[] { "brand_id#INT#false", "sales_region_id#INT#false", "brand_region_name#VARCHAR(500)#false", "sales_region_name#VARCHAR(500)#false"},
+            null,
+            new String[] { "brand_id#keyword_brand#id", "sales_region_id#sales_region#id"}),
     DAY_PART("day_part",
             new String[] { "name#VARCHAR(100)#false"},
             new String[] { "name#UNIQUE#name" },
@@ -300,7 +300,7 @@ public enum WmAdTable {
         public List<Query> getQueries() {
             final List<Query> queries = new ArrayList<>();
             queries.add(new Query("TargetsByKeywordTypeAndIds",
-                    "(where: {is_deleted: {_eq: false}, type: {_eq: \" + type + \"}, keyword_id: {_in: \" + keywordIds + \"}})",
+                    "(where: {is_deleted: {_eq: false}, keyword_type: {_eq: \" + type + \"}, keyword_id: {_in: \" + keywordIds + \"}})",
                      "String:type", "keywordIds"));
             return queries;
         }
