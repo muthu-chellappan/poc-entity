@@ -118,7 +118,7 @@ public enum WmAdTable {
             null),
     KEYWORD_TAG("keyword_tag",
             new String[] { "name#VARCHAR(500)#false", "keyword#VARCHAR(500)#false", "is_published#BOOLEAN", "tag_group#VARCHAR(500)" },
-            new String[] { "keyword#UNIQUE#keyword" },
+            null,
             null),
     SALES_REGION("sales_region",
             new String[] { "name#VARCHAR(500)#false", "keyword#VARCHAR(500)#false"},
