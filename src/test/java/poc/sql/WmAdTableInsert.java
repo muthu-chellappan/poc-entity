@@ -13,9 +13,9 @@ public enum WmAdTableInsert {
     AD_ZONE_LOCATION(WmAdTable.AD_ZONE_LOCATION,
             new String[] { "Homepage", "Other"},//name
             new String[] { "Homepage", "Other" }),//description
-    AD_ZONE(WmAdTable.AD_ZONE,
-            new String[] { "deliveries-listing-cards", "homepage-card-row-deliveries", "homepage-card-row-dispensaries", "map-listing-cards", "homepage-carousel-1", "homepage-carousel-2", "homepage-carousel-3", "homepage-carousel-4", "homepage-promo-tile-big", "homepage-promo-tile-small", "oserp-banner-top", "products-banner-top", "sale-carousel", "serp-banner-top"},//name
-            new String[] { "deliveries-listing-cards", "homepage-card-row-deliveries", "homepage-card-row-dispensaries", "map-listing-cards", "homepage-carousel-1", "homepage-carousel-2", "homepage-carousel-3", "homepage-carousel-4", "homepage-promo-tile-big", "homepage-promo-tile-small", "oserp-banner-top", "products-banner-top", "sale-carousel", "serp-banner-top" }),//description
+//    AD_ZONE(WmAdTable.AD_ZONE,
+//            new String[] { "deliveries-listing-cards", "homepage-card-row-deliveries", "homepage-card-row-dispensaries", "map-listing-cards", "homepage-carousel-1", "homepage-carousel-2", "homepage-carousel-3", "homepage-carousel-4", "homepage-promo-tile-big", "homepage-promo-tile-small", "oserp-banner-top", "products-banner-top", "sale-carousel", "serp-banner-top"},//name
+//            new String[] { "deliveries-listing-cards", "homepage-card-row-deliveries", "homepage-card-row-dispensaries", "map-listing-cards", "homepage-carousel-1", "homepage-carousel-2", "homepage-carousel-3", "homepage-carousel-4", "homepage-promo-tile-big", "homepage-promo-tile-small", "oserp-banner-top", "products-banner-top", "sale-carousel", "serp-banner-top" }),//description
     DEVICE_TYPE(WmAdTable.DEVICE_TYPE,
             new String[] { "Mobile", "Desktop"},//name
             new String[] { "Mobile", "Desktop" }),//description

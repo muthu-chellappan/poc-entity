@@ -170,7 +170,7 @@ public enum WmAdTable {
             null),
     CREATIVE("creative",
             new String[] { "name#VARCHAR(100)#false", "description#VARCHAR(500)", "duration#INT",
-                    "creative_markup#VARCHAR(4000)", "creative_format_id#INT#false", "advertisement_id#INT#false" },
+                    "creative_markup#VARCHAR(4000)", "creative_format_id#INT#false", "advertisement_id#INT#false", "click_thru_url#VARCHAR(4000)" },
             null,
             new String[] { "creative_format_id#creative_format#id", "advertisement_id#advertisement#id" }),
     DEAL_TYPE("deal_type",
