@@ -211,7 +211,16 @@ public enum WmAdTable {
                     "target_value_id#INT#false", "advertiser_id#INT#false"},
             new String[] {
                     "type_type_id_advertiser#UNIQUE#target_type,target_value_id,advertiser_id" },
-            new String[] { "advertiser_id#advertiser#id" }),
+            new String[] { "advertiser_id#advertiser#id" }){
+        public List<Query> getQueries() {
+            final List<Query> queries = new ArrayList<>();
+            queries.add(new Query("ActiveTargetsByTypeAndIds",
+                    "(where: {is_deleted: {_eq: false}, target_type: {_eq: \\\"\" + type\r\n"
+                    + "                + \"\\\"}, target_value_id: {_in: \" + targetIds + \"}})",
+                    "String:type", "targetIds"));
+            return queries;
+        }
+    },
     CAMPAIGN_TYPE("campaign_type",
             new String[] { "campaign_type_value#VARCHAR(100)#false" },
             new String[] { "campaign_type_value#UNIQUE#campaign_type_value" },
@@ -233,15 +242,14 @@ public enum WmAdTable {
             new String[] { "flight_id_advertisement_id#UNIQUE#flight_id,advertisement_id" },
             new String[] { "flight_id#flight#id", "advertisement_id#advertisement#id" }),
     FLIGHT_TARGET("flight_target",
-            new String[] { "type#VARCHAR(100)#false", "flight_id#INT#false", "target_id#INT#false" },
+            new String[] { "flight_id#INT#false", "target_id#INT#false" },
             null,
             new String[] { "flight_id#flight#id", "target_id#target#id" }){
         public List<Query> getQueries() {
             final List<Query> queries = new ArrayList<>();
-            queries.add(new Query("FlightsByTargetTypeAndIds",
-                    "(where: {is_deleted: {_eq: false}, type: {_eq: \\\"\" + type\r\n"
-                    + "                + \"\\\"}, target_id: {_in: \" + targetIds + \"}})",
-                    "String:type", "targetIds"));
+            queries.add(new Query("FlightsByTargetIds",
+                    "(where: {is_deleted: {_eq: false}, target_id: {_in: \" + targetIds + \"}})",
+                     "targetIds"));
             return queries;
         }
     },
@@ -300,7 +308,7 @@ public enum WmAdTable {
         public List<Query> getQueries() {
             final List<Query> queries = new ArrayList<>();
             queries.add(new Query("TargetsByKeywordTypeAndIds",
-                    "(where: {is_deleted: {_eq: false}, keyword_type: {_eq: \" + type + \"}, keyword_id: {_in: \" + keywordIds + \"}})",
+                    "(where: {is_deleted: {_eq: false}, keyword_type: {_eq: \\\"\" + type + \"\\\"}, keyword_id: {_in: \" + keywordIds + \"}})",
                      "String:type", "keywordIds"));
             return queries;
         }
@@ -352,10 +360,14 @@ public enum WmAdTable {
         public List<Query> getQueries() {
             final List<Query> queries = new ArrayList<>();
             queries.add(new Query("ActiveGeoTargetByCountryIdsOrStateIdsOrCityIdsOrPostalIds",
-                    "(where: {is_deleted: {_eq: false}, _or: {sales_city_id: {_in: \" + cityIds\r\n"
-                            + "                        + \"}, sales_country_id: {_in: \" + countryIds + \"}, sales_postal_code_id: {_in: \" + postalIds + \"}, sales_state_id: {_in: \" + stateIds\r\n"
-                            + "                        + \"}}})",
-                    "cityIds", "stateIds", "countryIds", "postalIds"));
+                    "(where: {is_deleted: {_eq: false},\"\r\n"
+                    + "                + \"_or: [{\"\r\n"
+                    + "                + \"sales_country_id: {_in: \" + countryIds + \"}\"\r\n"
+                    + "                + \", sales_state_id: {_in: \" + stateIds + \"}\"\r\n"
+                    + "                + \", sales_city_id: {_in: \" + cityIds + \"}\"\r\n"
+                    + "                + \", sales_postal_code_id: {_in: \" + postalIds + \"}\"\r\n"
+                    + "                + \"}]})",
+                    "countryIds", "stateIds", "cityIds", "postalIds"));
             return queries;
         }
     },
@@ -366,9 +378,9 @@ public enum WmAdTable {
         public List<Query> getQueries() {
             final List<Query> queries = new ArrayList<>();
             queries.add(new Query("ActiveDeviceTargetByDeviceTypeIdsOrDeviceMakeIdsOrDeviceModelIds",
-                    "(where: {is_deleted: {_eq: false}, _or: {device_type_id: {_in: \" + deviceTypeIds\r\n"
+                    "(where: {is_deleted: {_eq: false}, _or: [{device_type_id: {_in: \" + deviceTypeIds\r\n"
                     + "                        + \"}, device_make_id: {_in: \" + deviceMakeIds + \"}, device_model_id: {_in: \" + deviceModelIds\r\n"
-                    + "                        + \"}}})",
+                    + "                        + \"}}]})",
                     "deviceTypeIds", "deviceMakeIds", "deviceModelIds"));
             return queries;
         }
