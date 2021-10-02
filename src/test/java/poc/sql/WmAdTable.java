@@ -352,10 +352,12 @@ public enum WmAdTable {
         public List<Query> getQueries() {
             final List<Query> queries = new ArrayList<>();
             queries.add(new Query("ActiveGeoTargetByCountryIdsOrStateIdsOrCityIdsOrPostalIds",
-                    "(where: {is_deleted: {_eq: false}, _or: {sales_city_id: {_in: \" + cityIds\r\n"
-                            + "                        + \"}, sales_country_id: {_in: \" + countryIds + \"}, sales_postal_code_id: {_in: \" + postalIds + \"}, sales_state_id: {_in: \" + stateIds\r\n"
-                            + "                        + \"}}})",
-                    "cityIds", "stateIds", "countryIds", "postalIds"));
+                    "(where: {is_deleted: {_eq: false}, _or: [\"\r\n"
+                            + "                + \"                       {sales_city_id: {_in: \" + cityIds + \"}},\"\r\n"
+                            + "                + \"                       {sales_country_id: {_in: \" + countryIds + \"}},\"\r\n"
+                            + "                + \"                       {sales_postal_code_id: {_in: \" + postalIds + \"}},\"\r\n"
+                            + "                + \"                       {sales_state_id: {_in: \" + stateIds + \"}}]})",
+                    "countryIds", "stateIds", "cityIds", "postalIds"));
             return queries;
         }
     },
@@ -366,9 +368,10 @@ public enum WmAdTable {
         public List<Query> getQueries() {
             final List<Query> queries = new ArrayList<>();
             queries.add(new Query("ActiveDeviceTargetByDeviceTypeIdsOrDeviceMakeIdsOrDeviceModelIds",
-                    "(where: {is_deleted: {_eq: false}, _or: {device_type_id: {_in: \" + deviceTypeIds\r\n"
-                    + "                        + \"}, device_make_id: {_in: \" + deviceMakeIds + \"}, device_model_id: {_in: \" + deviceModelIds\r\n"
-                    + "                        + \"}}})",
+                    "(where: {is_deleted: {_eq: false}, _or: [\"\r\n"
+                    + "                + \"                       {device_type_id: {_in: \" + deviceTypeIds + \"}},\"\r\n"
+                    + "                + \"                       {device_make_id: {_in: \" + deviceMakeIds + \"}},\"\r\n"
+                    + "                + \"                       {device_model_id: {_in: \" + deviceModelIds + \"}}]})",
                     "deviceTypeIds", "deviceMakeIds", "deviceModelIds"));
             return queries;
         }
