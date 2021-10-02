@@ -170,7 +170,7 @@ public enum WmAdTable {
             null),
     CREATIVE("creative",
             new String[] { "name#VARCHAR(100)#false", "description#VARCHAR(500)", "duration#INT",
-                    "creative_markup#VARCHAR(4000)", "creative_format_id#INT#false", "advertisement_id#INT#false" },
+                    "creative_markup#VARCHAR(4000)", "creative_format_id#INT#false", "advertisement_id#INT#false", "click_thru_url#VARCHAR(4000)" },
             null,
             new String[] { "creative_format_id#creative_format#id", "advertisement_id#advertisement#id" }),
     DEAL_TYPE("deal_type",
@@ -211,7 +211,16 @@ public enum WmAdTable {
                     "target_value_id#INT#false", "advertiser_id#INT#false"},
             new String[] {
                     "type_type_id_advertiser#UNIQUE#target_type,target_value_id,advertiser_id" },
-            new String[] { "advertiser_id#advertiser#id" }),
+            new String[] { "advertiser_id#advertiser#id" }){
+        public List<Query> getQueries() {
+            final List<Query> queries = new ArrayList<>();
+            queries.add(new Query("ActiveTargetsByTypeAndIds",
+                    "(where: {is_deleted: {_eq: false}, target_type: {_eq: \\\"\" + type\r\n"
+                    + "                + \"\\\"}, target_value_id: {_in: \" + targetIds + \"}})",
+                    "String:type", "targetIds"));
+            return queries;
+        }
+    },
     CAMPAIGN_TYPE("campaign_type",
             new String[] { "campaign_type_value#VARCHAR(100)#false" },
             new String[] { "campaign_type_value#UNIQUE#campaign_type_value" },
@@ -233,15 +242,14 @@ public enum WmAdTable {
             new String[] { "flight_id_advertisement_id#UNIQUE#flight_id,advertisement_id" },
             new String[] { "flight_id#flight#id", "advertisement_id#advertisement#id" }),
     FLIGHT_TARGET("flight_target",
-            new String[] { "type#VARCHAR(100)#false", "flight_id#INT#false", "target_id#INT#false" },
+            new String[] { "flight_id#INT#false", "target_id#INT#false" },
             null,
             new String[] { "flight_id#flight#id", "target_id#target#id" }){
         public List<Query> getQueries() {
             final List<Query> queries = new ArrayList<>();
-            queries.add(new Query("FlightsByTargetTypeAndIds",
-                    "(where: {is_deleted: {_eq: false}, type: {_eq: \\\"\" + type\r\n"
-                    + "                + \"\\\"}, target_id: {_in: \" + targetIds + \"}})",
-                    "String:type", "targetIds"));
+            queries.add(new Query("FlightsByTargetIds",
+                    "(where: {is_deleted: {_eq: false}, target_id: {_in: \" + targetIds + \"}})",
+                     "targetIds"));
             return queries;
         }
     },
@@ -300,7 +308,7 @@ public enum WmAdTable {
         public List<Query> getQueries() {
             final List<Query> queries = new ArrayList<>();
             queries.add(new Query("TargetsByKeywordTypeAndIds",
-                    "(where: {is_deleted: {_eq: false}, keyword_type: {_eq: \" + type + \"}, keyword_id: {_in: \" + keywordIds + \"}})",
+                    "(where: {is_deleted: {_eq: false}, keyword_type: {_eq: \\\"\" + type + \"\\\"}, keyword_id: {_in: \" + keywordIds + \"}})",
                      "String:type", "keywordIds"));
             return queries;
         }
