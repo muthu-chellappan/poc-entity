@@ -243,7 +243,7 @@ public enum WmAdTable {
             new String[] { "flight_id#flight#id", "advertisement_id#advertisement#id" }),
     FLIGHT_TARGET("flight_target",
             new String[] { "flight_id#INT#false", "target_id#INT#false" },
-            null,
+            new String[] { "flight_id_target_id#UNIQUE#flight_id,target_id" },
             new String[] { "flight_id#flight#id", "target_id#target#id" }){
         public List<Query> getQueries() {
             final List<Query> queries = new ArrayList<>();
@@ -255,7 +255,7 @@ public enum WmAdTable {
     },
     OS_TARGET("os_target",
             new String[] { "os_id#INT#false" },
-            null,
+            new String[] { "os_id#UNIQUE#os_id" },
             new String[] { "os_id#os#id"}){
         public List<Query> getQueries() {
             final List<Query> queries = new ArrayList<>();
@@ -267,7 +267,7 @@ public enum WmAdTable {
     },
     BROWSER_TARGET("browser_target",
             new String[] { "browser_id#INT#false" },
-            null,
+            new String[] { "browser_id#UNIQUE#browser_id" },
             new String[] { "browser_id#browser#id"}){
         public List<Query> getQueries() {
             final List<Query> queries = new ArrayList<>();
@@ -279,7 +279,7 @@ public enum WmAdTable {
     },
     AD_ZONE_TARGET("ad_zone_target",
             new String[] { "ad_zone_id#INT#false" },
-            null,
+            new String[] { "ad_zone_id#UNIQUE#ad_zone_id" },
             new String[] { "ad_zone_id#ad_zone#id"}){
         public List<Query> getQueries() {
             final List<Query> queries = new ArrayList<>();
@@ -291,7 +291,7 @@ public enum WmAdTable {
     },
     AD_ZONE_LOCATION_TARGET("ad_zone_location_target",
             new String[] { "ad_zone_location_id#INT#false" },
-            null,
+            new String[] { "ad_zone_location_id#UNIQUE#ad_zone_location_id" },
             new String[] { "ad_zone_location_id#ad_zone_location#id"}){
         public List<Query> getQueries() {
             final List<Query> queries = new ArrayList<>();
@@ -303,7 +303,7 @@ public enum WmAdTable {
     },
     KEYWORDS_TARGET("keywords_target",
             new String[] { "keyword_id#INT#false", "keyword_type#VARCHAR(50)#false" },
-            null,
+            new String[] { "keyword_type_keyword_id#UNIQUE#keyword_type,keyword_id" },
             null){
         public List<Query> getQueries() {
             final List<Query> queries = new ArrayList<>();
@@ -315,7 +315,7 @@ public enum WmAdTable {
     },
     DAY_PART_TARGET("day_part_target",
             new String[] { "day_part_id#INT#false" },
-            null,
+            new String[] { "day_part_id#UNIQUE#day_part_id" },
             new String[] { "day_part_id#day_part#id"}){
         public List<Query> getQueries() {
             final List<Query> queries = new ArrayList<>();
@@ -328,7 +328,7 @@ public enum WmAdTable {
     },
     SALES_REGION_TARGET("sales_region_target",
             new String[] { "sales_region_id#INT#false" },
-            null,
+            new String[] { "sales_region_id#UNIQUE#sales_region_id" },
             new String[] { "sales_region_id#sales_region#id"}){
         public List<Query> getQueries() {
             final List<Query> queries = new ArrayList<>();
@@ -341,7 +341,7 @@ public enum WmAdTable {
     },
     BRAND_REGION_TARGET("brand_region_target",
             new String[] { "brand_region_id#INT#false" },
-            null,
+            new String[] { "brand_region_id#UNIQUE#brand_region_id" },
             new String[] { "brand_region_id#brand_region#id"}){
         public List<Query> getQueries() {
             final List<Query> queries = new ArrayList<>();
