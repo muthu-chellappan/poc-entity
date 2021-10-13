@@ -12,7 +12,7 @@ public enum WmAdTable {
             null),
     STATE("state",
             new String[] { "name#VARCHAR(100)#false", "code#VARCHAR(3)", "country_id#INT#false" },
-            new String[] { "code#UNIQUE#code" },
+            null,
             new String[] { "country_id#country#id" }){
         public List<Query> getQueries() {
             final List<Query> queries = new ArrayList<>();
@@ -24,7 +24,7 @@ public enum WmAdTable {
     },
     CITY("city",
             new String[] { "name#VARCHAR(100)#false", "code#VARCHAR(3)", "state_id#INT#false" },
-            new String[] { "code#UNIQUE#code" },
+            null,
             new String[] { "state_id#state#id" }){
         public List<Query> getQueries() {
             final List<Query> queries = new ArrayList<>();
@@ -36,7 +36,7 @@ public enum WmAdTable {
     },
     POSTAL_CODE("postal_code",
             new String[] { "code#VARCHAR(100)#false", "description#VARCHAR(100)", "city_id#INT#false" },
-            new String[] { "code#UNIQUE#code" },
+            null,
             new String[] { "city_id#city#id" }){
         public List<Query> getQueries() {
             final List<Query> queries = new ArrayList<>();
@@ -170,7 +170,9 @@ public enum WmAdTable {
             null),
     CREATIVE("creative",
             new String[] { "name#VARCHAR(100)#false", "description#VARCHAR(500)", "duration#INT",
-                    "creative_markup#VARCHAR(4000)", "creative_format_id#INT#false", "advertisement_id#INT#false", "click_thru_url#VARCHAR(4000)" },
+                    "creative_markup#VARCHAR(4000)", "creative_format_id#INT#false", 
+                    "advertisement_id#INT#false", "click_thru_url#VARCHAR(1000)#false", 
+                    "location_url#VARCHAR(1000)#false"},
             null,
             new String[] { "creative_format_id#creative_format#id", "advertisement_id#advertisement#id" }),
     DEAL_TYPE("deal_type",
