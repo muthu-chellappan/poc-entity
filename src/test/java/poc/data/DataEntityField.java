@@ -62,6 +62,7 @@ public class DataEntityField {
     private enum DataType {
         STRING(String.class, "VARCHAR", "TEXT", "NTEXT", "NVARCHAR"),
         INTEGER(Integer.class, "INT"),
+        DOUBLE(Double.class, "NUMERIC"),
         DATE(Date.class, "TIMESTAMP", "DATE"),
         BOOLEAN(Boolean.class, "BOOLEAN"),
         CHAR(Character.class, "CHAR");
