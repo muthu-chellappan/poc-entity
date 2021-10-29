@@ -36,11 +36,11 @@ public class ${type.name}Repo extends GraphQLReadOnlyRepository<${type.name}> {
         return execute(name, filter, ENTITY, ${type.name}.class);
     }
 
-    public List<$type.name> getActive${type.plural}After(Date lastModified){
+    public List<$type.name> get${type.plural}After(Date lastModified){
         Objects.requireNonNull(lastModified);
         String lastModifiedDate = YYYY_MM_DD_FORMATTER.format(lastModified);
         final String name = "UpdatedAfter";
-        final String filter = "(where: {is_deleted: {_eq: false}, updated_at: {_gte: \"" + lastModifiedDate + "\"}})";
+        final String filter = "(where: {updated_at: {_gte: \"" + lastModifiedDate + "\"}})";
         log.debug("Fetching query for ${type.name}(s): {} with filter: {}", name, filter);
         return execute(name, filter, ENTITY, ${type.name}.class);
     }
