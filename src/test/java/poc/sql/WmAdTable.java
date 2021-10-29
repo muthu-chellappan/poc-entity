@@ -169,12 +169,33 @@ public enum WmAdTable {
             new String[] { "type_width_height#UNIQUE#type,width,height" },
             null),
     CREATIVE("creative",
-            new String[] { "name#VARCHAR(100)#false", "description#VARCHAR(500)", "duration#INT",
-                    "creative_markup#VARCHAR(4000)", "creative_format_id#INT#false", 
-                    "advertisement_id#INT#false", "click_thru_url#VARCHAR(1000)#false", 
-                    "location_url#VARCHAR(1000)#false"},
+            new String[] { "name#VARCHAR(100)#false", "description#VARCHAR(500)", "creative_format_id#INT#false",
+                    "advertisement_id#INT#false", "click_thru_url#VARCHAR(1000)#false", "wm_type#VARCHAR(100)",
+                    "alt_text#VARCHAR(1000)", "disclosure#VARCHAR(1000)", "theme#varchar(100)" },
             null,
-            new String[] { "creative_format_id#creative_format#id", "advertisement_id#advertisement#id" }),
+            new String[] { "creative_format_id#creative_format#id", "advertisement_id#advertisement#id" }){
+        public List<Query> getQueries() {
+            final List<Query> queries = new ArrayList<>();
+            queries.add(new Query("ActiveCreativesByAdvertisementIds",
+                    "(where: {is_deleted: {_eq: false}, advertisement_id: {_in: \" + adIds + \"}})",
+                    "adIds"));
+            return queries;
+        }
+    },
+    ASSET("asset",
+            new String[] { "name#VARCHAR(100)#false", "location_url#VARCHAR(4000)#false", "width#INT#false",
+                    "height#INT#false", "duration#INT",
+                    "creative_id#INT#false"},
+            null,
+            new String[] { "creative_id#creative#id"}){
+        public List<Query> getQueries() {
+            final List<Query> queries = new ArrayList<>();
+            queries.add(new Query("ActiveAssetsByCreativeIds",
+                    "(where: {is_deleted: {_eq: false}, creative_id: {_in: \" + creativeIds + \"}})",
+                    "creativeIds"));
+            return queries;
+        }
+    },
     DEAL_TYPE("deal_type",
             new String[] { "type#VARCHAR(15)#false" },
             new String[] { "type#UNIQUE#type" },
@@ -191,7 +212,7 @@ public enum WmAdTable {
             new String[] { "description#VARCHAR(500)", "campaign_budget_amount#INT", "start_date#DATE", "end_date#DATE",
                     "currency_id#INT#false", "budget_duration_id#INT#false", "pacing_type_id#INT#false",
                     "cost_method_id#INT#false", "buying_type_id#INT#false", "freq_cap_interval_type_id#INT#false",
-                    "cost_price#NUMERIC(15,6)#false", "floor_price#NUMERIC(15,6)" },
+                    "cost_price#NUMERIC(15,6)#false", "floor_price#NUMERIC(15,6)#false" },
             null,
             new String[] { "currency_id#currency#id", "budget_duration_id#budget_duration#id",
                     "pacing_type_id#pacing_type#id", "buying_type_id#buying_type#id",
@@ -199,7 +220,7 @@ public enum WmAdTable {
     FLIGHT_BUDGET("flight_budget",
             new String[] { "description#VARCHAR(500)", "flight_budget_amount#INT", "start_date#DATE", "end_date#DATE",
                     "budget_duration_id#INT#false", "pacing_type_id#INT#false", "cost_method_id#INT", 
-                    "freq_cap_interval_type_id#INT#false", "cost_price#NUMERIC(15,6)#false", "floor_price#NUMERIC(15,6)" },
+                    "freq_cap_interval_type_id#INT#false", "cost_price#NUMERIC(15,6)#false", "floor_price#NUMERIC(15,6)#false" },
             null,
             new String[] { "budget_duration_id#budget_duration#id",
                     "pacing_type_id#pacing_type#id", "freq_cap_interval_type_id#freq_cap_interval_type#id",
@@ -242,7 +263,14 @@ public enum WmAdTable {
     FLIGHT_ADVERTISEMENT("flight_advertisement",
             new String[] { "flight_id#INT#false", "advertisement_id#INT#false" },
             new String[] { "flight_id_advertisement_id#UNIQUE#flight_id,advertisement_id" },
-            new String[] { "flight_id#flight#id", "advertisement_id#advertisement#id" }),
+            new String[] { "flight_id#flight#id", "advertisement_id#advertisement#id" }) {
+        public List<Query> getQueries() {
+            final List<Query> queries = new ArrayList<>();
+            queries.add(new Query("ActiveFlightAdvertisementByFlightIds",
+                    "(where: {is_deleted: {_eq: false}, flight_id: {_in: \" + flightIds + \"}})", "flightIds"));
+            return queries;
+        }
+    },
     FLIGHT_TARGET("flight_target",
             new String[] { "flight_id#INT#false", "target_id#INT#false" },
             new String[] { "flight_id_target_id#UNIQUE#flight_id,target_id" },
