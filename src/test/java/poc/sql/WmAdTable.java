@@ -257,7 +257,7 @@ public enum WmAdTable {
                     "campaign_budget_id#campaign_budget#id", "time_zone_id#time_zone#id", "cost_method_id#cost_method#id" }),
     FLIGHT("flight",
             new String[] { "name#VARCHAR(100)#false", "description#VARCHAR(500)", "campaign_id#INT#false",
-                    "flight_budget_id#INT#false", "cost_method_id#INT" },
+                    "flight_budget_id#INT", "cost_method_id#INT" },
             null,
             new String[] { "campaign_id#campaign#id", "flight_budget_id#flight_budget#id", "cost_method_id#cost_method#id" }),
     FLIGHT_ADVERTISEMENT("flight_advertisement",
