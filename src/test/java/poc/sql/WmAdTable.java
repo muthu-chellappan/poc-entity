@@ -101,7 +101,7 @@ public enum WmAdTable {
             new String[] { "name#UNIQUE#name" },
             null),
     AD_ZONE("ad_zone",
-            new String[] { "name#VARCHAR(100)#false", "description#VARCHAR(500)" },
+            new String[] { "name#VARCHAR(100)#false", "description#VARCHAR(500)", "ad_count#INT#false#1" },
             new String[] { "name#UNIQUE#name" },
             null),
     AD_ZONE_LOCATION("ad_zone_location",
