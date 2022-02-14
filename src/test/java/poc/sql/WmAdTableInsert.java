@@ -5,8 +5,8 @@ public enum WmAdTableInsert {
     CAMPAIGN_TYPE(WmAdTable.CAMPAIGN_TYPE,
             new String[] { "Direct Sold", "Marketplace" }),//campaign_type_value
     BUYING_TYPE(WmAdTable.BUYING_TYPE,
-            new String[] { "Sponsorship", "Premium", "Standard" },//name
-            new String[] { "Sponsorship", "Premium", "Standard" }),//type
+            new String[] { "Sponsorship", "Premium", "Standard", "House" },//name
+            new String[] { "Sponsorship", "Premium", "Standard", "House" }),//type
     COST_METHOD(WmAdTable.COST_METHOD,
             new String[] { "CPM", "CPC", "CPA" },//code
             new String[] { "Cost Per Milli", "Cost Per Click", "Cost Per Action" }),//description
@@ -20,7 +20,7 @@ public enum WmAdTableInsert {
             new String[] { "Mobile", "Desktop"},//name
             new String[] { "Mobile", "Desktop" }),//description
     BUDGET_DURATION(WmAdTable.BUDGET_DURATION,
-            new String[] { "Daily", "Lifetime"}),//duration_value
+            new String[] { "Daily", "Lifetime", "Unlimited"}),//duration_value
     OS(WmAdTable.OS,
     		new String[] { "IOS", "Android"}, // name 
             new String[] { "IOS", "Android"}),// description
