@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ${type.name}Repo extends AbstractGraphQLRepository<${type.name}> {
 
-    private static final String ENTITY = ${type.name}.class.getSimpleName();
+    private static final String ENTITY = "${type.tableName}";
 
     protected String getEntity() {
         return ENTITY;
@@ -46,6 +46,26 @@ public class ${type.name}Repo extends AbstractGraphQLRepository<${type.name}> {
         log.debug("Fetching query for ${type.name}(s): {} with filter: {}", name, filter);
         return execute(name, filter, ENTITY, ${type.name}.class);
     }
+
+    public void appendInsertFields(StringBuilder builder, ${type.name} entity){
+#foreach( $field in $type.fields )
+        builder.append("$field.tableFieldName: ");
+#if ( $velocityCount < $type.fields.size() )
+#if(${field.type.toString().contains("VARCHAR")} || ${field.type.toString().contains("JSON")})
+        builder.append("\"").append(entity.${field.accessorName}()).append("\",");
+#else
+        builder.append(entity.${field.accessorName}()).append(",");
+#end
+#else
+#if(${field.type.toString().contains("VARCHAR")} || ${field.type.toString().contains("JSON")})
+        builder.append("\"").append(entity.${field.accessorName}()).append("\"");
+#else
+        builder.append(entity.${field.accessorName}());
+#end
+#end
+#end
+    }
+
 
 #foreach( $query in $type.queries )
     public List<${type.name}> get${query.name}(

@@ -19,6 +19,7 @@ public class DataEntityField {
     private final String name;
     private final Class ct;
     private final String tableFieldName;
+    private String accessorName;
 
     public DataEntityField(final MatchType type, final String name, final String tableFieldName) {
         this.type = type.getType().getSimpleName();
@@ -48,6 +49,11 @@ public class DataEntityField {
 
     public String getName() {
         return conventionalFieldName(name);
+    }
+
+    public String getAccessorName() {
+        String tempName = conventionalFieldName(name);
+        return "get"+tempName.substring(0,1).toUpperCase()+tempName.substring(1, tempName.length());
     }
 
     public static String conventionalFieldName(final String name) {

@@ -14,7 +14,7 @@ public enum MacaTable {
             null,
             new String[] { "user_id#user#id" }),
     ACCOUNT("account",
-            new String[] { "account_data#json" },
+            new String[] { "account_data#JSON" },
             null,
             null),
     ACCOUNT_USER("account_user",
