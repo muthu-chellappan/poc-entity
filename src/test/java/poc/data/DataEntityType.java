@@ -23,6 +23,10 @@ public class DataEntityType {
         return conventionalTypeName(name);
     }
 
+    public String getLowerCaseName() {
+        return conventionalTypeName(name).toLowerCase();
+    }
+
     public String getEntity() {
         return name;
     }
@@ -63,19 +67,19 @@ public class DataEntityType {
 
     public void addDefaultFields() {
         fields.add(new DataEntityField(
-                DataEntityField.getMatchingType("id", "INT", Collections.emptyList()).getType(), "id", "id"));
+                DataEntityField.getMatchingType("id", "INT", Collections.emptyList()), "id", "id"));
         fields.add(new DataEntityField(DataEntityField.getMatchingType("is_deleted", "BOOLEAN", Collections.emptyList())
-                .getType(), "is_deleted", "is_deleted"));
+                , "is_deleted", "is_deleted"));
         fields.add(
                 new DataEntityField(DataEntityField.getMatchingType("created_at", "TIMESTAMP", Collections.emptyList())
-                        .getType(), "created_at", "created_at"));
+                        , "created_at", "created_at"));
         fields.add(
                 new DataEntityField(DataEntityField.getMatchingType("updated_at", "TIMESTAMP", Collections.emptyList())
-                        .getType(), "updated_at", "updated_at"));
+                        , "updated_at", "updated_at"));
         fields.add(new DataEntityField(DataEntityField.getMatchingType("created_by", "VARCHAR", Collections.emptyList())
-                .getType(), "created_by", "created_by"));
+                , "created_by", "created_by"));
         fields.add(new DataEntityField(DataEntityField.getMatchingType("updated_by", "VARCHAR", Collections.emptyList())
-                .getType(), "updated_by", "updated_by"));
+                , "updated_by", "updated_by"));
     }
 
 }

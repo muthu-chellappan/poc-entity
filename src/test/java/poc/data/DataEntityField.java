@@ -15,13 +15,15 @@ import poc.sql.Key;
 public class DataEntityField {
 
     private final String type;
+    private final String ptype;
     private final String name;
     private final Class ct;
     private final String tableFieldName;
 
-    public DataEntityField(final Class type, final String name, final String tableFieldName) {
-        this.type = type.getSimpleName();
-        this.ct = type;
+    public DataEntityField(final MatchType type, final String name, final String tableFieldName) {
+        this.type = type.getType().getSimpleName();
+        this.ct = type.getType();
+        this.ptype = type.getPtype();
         this.name = name;
         this.tableFieldName = tableFieldName;
     }
@@ -29,13 +31,15 @@ public class DataEntityField {
     public DataEntityField(final String type, final String name, final String tableFieldName) {
         this.type = type;
         this.ct = null;
+        this.ptype = null;
         this.name = name;
         this.tableFieldName = tableFieldName;
     }
 
     public static MatchType getMatchingType(final String name, final String type, final List<Key> keys) {
         final Optional<Key> key = keys.stream().filter(k -> k.getCol().equals(name)).findFirst();
-        final MatchType match = new MatchType(name, DataType.find(type).type);
+        DataType dataType = DataType.find(type);
+        final MatchType match = new MatchType(name, dataType.type, dataType.ptype);
         if (key.isPresent()) {
             match.setKey(key.get());
         }
@@ -60,14 +64,15 @@ public class DataEntityField {
     }
 
     private enum DataType {
-        STRING(String.class, "VARCHAR", "TEXT", "NTEXT", "NVARCHAR"),
-        INTEGER(Integer.class, "INT"),
-        DOUBLE(Double.class, "NUMERIC"),
-        DATE(Date.class, "TIMESTAMP", "DATE"),
-        BOOLEAN(Boolean.class, "BOOLEAN"),
-        CHAR(Character.class, "CHAR");
+        STRING(String.class, "string", "VARCHAR", "TEXT", "NTEXT", "NVARCHAR", "JSON", "JSONB"),
+        INTEGER(Integer.class, "int32", "INT"),
+        DOUBLE(Double.class, "double", "NUMERIC"),
+        DATE(Date.class, "int64", "TIMESTAMP", "DATE"),
+        BOOLEAN(Boolean.class, "bool", "BOOLEAN"),
+        CHAR(Character.class, "string", "CHAR");
 
         private final Class type;
+        private final String ptype;
         private final String[] matches;
         private static final Map<String, DataType> TYPES = new HashMap<>();
 
@@ -80,8 +85,9 @@ public class DataEntityField {
             }
         }
 
-        private DataType(final Class type, final String...matches) {
+        private DataType(final Class type, final String ptype, final String...matches) {
             this.type = type;
+            this.ptype = ptype;
             this.matches = matches;
         }
 
@@ -106,6 +112,7 @@ public class DataEntityField {
     static class MatchType {
         private final String name;
         private final Class type;
+        private final String ptype;
 
         private Key key;
     }

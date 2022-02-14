@@ -1,0 +1,68 @@
+package com.macapayments.services.repo.impl;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+
+import com.macapayments.services.entity.${type.lowerCaseName}.${type.name};
+import com.macapayments.services.repo.AbstractGraphQLRepository;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+public class ${type.name}Repo extends AbstractGraphQLRepository<${type.name}> {
+
+    private static final String ENTITY = ${type.name}.class.getSimpleName();
+
+    protected String getEntity() {
+        return ENTITY;
+    }
+
+    protected Class<${type.name}> getType() {
+        return ${type.name}.class;
+    }
+
+    protected ${type.name}.Builder newBuilder() {
+        return ${type.name}.newBuilder();
+    }
+
+    protected void appendAllFields(final StringBuilder builder) {
+        //${type.name}.appendAllFields(builder);
+        // TODO
+    }
+
+    public List<${type.name}> getActive${type.plural}(){
+        final String name = "Active";
+        final String filter = "(where: {is_deleted: {_eq: false}})";
+        log.debug("Fetching query for ${type.name}(s): {} with filter: {}", name, filter);
+        return execute(name, filter, ENTITY, ${type.name}.class);
+    }
+
+    public List<${type.name}> get${type.plural}After(Date lastModified){
+        Objects.requireNonNull(lastModified);
+        String lastModifiedDate = YYYY_MM_DD_FORMATTER.format(lastModified);
+        final String name = "UpdatedAfter";
+        final String filter = "(where: {updated_at: {_gte: \"" + lastModifiedDate + "\"}})";
+        log.debug("Fetching query for ${type.name}(s): {} with filter: {}", name, filter);
+        return execute(name, filter, ENTITY, ${type.name}.class);
+    }
+
+#foreach( $query in $type.queries )
+    public List<${type.name}> get${query.name}(
+#foreach( $field in $query.fields )
+#if ( $velocityCount < $query.fields.size() )
+            final ${field.type} ${field.name},
+#else
+            final ${field.type} ${field.name}) {
+#end
+#end
+#foreach( $field in $query.fields )
+        Objects.requireNonNull($field.name);
+#end
+        final String name = "${query.name}";
+        final String filter = "${query.filter}";
+        log.debug("Fetching query for ${type.name}(s): {} with filter: {}", name, filter);
+        return execute(name, filter, ENTITY, ${type.name}.class);
+    }
+#end
+}

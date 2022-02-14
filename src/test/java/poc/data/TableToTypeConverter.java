@@ -13,7 +13,7 @@ public class TableToTypeConverter {
         }
         table.getColumns().forEach(col -> {
             final MatchType mt = DataEntityField.getMatchingType(col.getName(), col.getType(), table.getKeys());
-            type.addField(new DataEntityField(mt.getType(), mt.getName(),col.getName()));
+            type.addField(new DataEntityField(mt, mt.getName(),col.getName()));
 //            if (mt.getKey() != null) {
 //                final String kt = mt.getKey().getTable();
 //                final String fn = DataEntityField.conventionalFieldName(kt);
