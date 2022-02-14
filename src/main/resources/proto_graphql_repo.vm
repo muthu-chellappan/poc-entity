@@ -51,13 +51,13 @@ public class ${type.name}Repo extends AbstractGraphQLRepository<${type.name}> {
 #foreach( $field in $type.fields )
         builder.append("$field.tableFieldName: ");
 #if ( $velocityCount < $type.fields.size() )
-#if(${field.type.toString().contains("VARCHAR")} || ${field.type.toString().contains("JSON")})
+#if(${field.type.equals("String")})
         builder.append("\"").append(entity.${field.accessorName}()).append("\",");
 #else
         builder.append(entity.${field.accessorName}()).append(",");
 #end
 #else
-#if(${field.type.toString().contains("VARCHAR")} || ${field.type.toString().contains("JSON")})
+#if(${field.type.equals("String")})
         builder.append("\"").append(entity.${field.accessorName}()).append("\"");
 #else
         builder.append(entity.${field.accessorName}());

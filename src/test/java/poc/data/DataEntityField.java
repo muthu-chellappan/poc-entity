@@ -19,7 +19,6 @@ public class DataEntityField {
     private final String name;
     private final Class ct;
     private final String tableFieldName;
-    private String accessorName;
 
     public DataEntityField(final MatchType type, final String name, final String tableFieldName) {
         this.type = type.getType().getSimpleName();
