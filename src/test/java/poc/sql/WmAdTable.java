@@ -19,6 +19,9 @@ public enum WmAdTable {
             queries.add(new Query("ActiveStatesByCountryIds",
                     "(where: {is_deleted: {_eq: false}, country_id: {_in: \" + countryIds + \"}})",
                     "countryIds"));
+            queries.add(new Query("StatesByCountryIdsOrModifiedAfter",
+                    "(where: {_or: [{country_id: {_in: \" + countryIds + \"}}, {updated_at: {_gte: \" + lastModifiedDate + \"}}]})",
+                    "countryIds", "Date:lastModified"));
             return queries;
         }
     },
@@ -31,6 +34,9 @@ public enum WmAdTable {
             queries.add(new Query("ActiveCitiesByStateIds",
                     "(where: {is_deleted: {_eq: false}, state_id: {_in: \" + stateIds + \"}})",
                     "stateIds"));
+            queries.add(new Query("CitiesByStateIdsOrModifiedAfter",
+                    "(where: {_or: [{state_id: {_in: \" + stateIds + \"}}, {updated_at: {_gte: \" + lastModifiedDate + \"}}]})",
+                    "stateIds", "Date:lastModified"));
             return queries;
         }
     },
@@ -43,6 +49,9 @@ public enum WmAdTable {
             queries.add(new Query("ActivePostalsByCityIds",
                     "(where: {is_deleted: {_eq: false}, city_id: {_in: \" + cityIds + \"}})",
                     "cityIds"));
+            queries.add(new Query("PostalsByCityIdsOrModifiedAfter",
+                    "(where: {_or: [{city_id: {_in: \" + cityIds + \"}}, {updated_at: {_gte: \" + lastModifiedDate + \"}}]})",
+                    "cityIds", "Date:lastModified"));
             return queries;
         }
     },
@@ -76,6 +85,9 @@ public enum WmAdTable {
             queries.add(new Query("ActiveDeviceMakesByDeviceTypeIds",
                     "(where: {is_deleted: {_eq: false}, device_type_id: {_in: \" + deviceTypeIds + \"}})",
                     "deviceTypeIds"));
+            queries.add(new Query("DeviceMakesByDeviceTypeIdsOrModifiedAfter",
+                    "(where: {_or: [{device_type_id: {_in: \" + deviceTypeIds + \"}}, {updated_at: {_gte: \" + lastModifiedDate + \"}}]})",
+                    "deviceTypeIds", "Date:lastModified"));
             return queries;
         }
     },
@@ -89,6 +101,9 @@ public enum WmAdTable {
             queries.add(new Query("ActiveDeviceModelsByDeviceMakeIds",
                     "(where: {is_deleted: {_eq: false}, device_make_id: {_in: \" + deviceMakeIds + \"}})",
                     "deviceMakeIds"));
+            queries.add(new Query("DeviceModelsByDeviceMakeIdsOrModifiedAfter",
+                    "(where: {_or: [{device_make_id: {_in: \" + deviceMakeIds + \"}}, {updated_at: {_gte: \" + lastModifiedDate + \"}}]})",
+                    "deviceMakeIds", "Date:lastModified"));
             return queries;
         }
     },
@@ -101,7 +116,7 @@ public enum WmAdTable {
             new String[] { "name#UNIQUE#name" },
             null),
     AD_ZONE("ad_zone",
-            new String[] { "name#VARCHAR(100)#false", "description#VARCHAR(500)" },
+            new String[] { "name#VARCHAR(100)#false", "description#VARCHAR(500)", "ad_count#INT#false#1" },
             new String[] { "name#UNIQUE#name" },
             null),
     AD_ZONE_LOCATION("ad_zone_location",
@@ -153,13 +168,13 @@ public enum WmAdTable {
             null,
             null),
     ACCOUNT("account",
-            new String[] { "name#VARCHAR(100)#false", "description#VARCHAR(500)", "account_type_id#INT#false" },
+            new String[] { "name#VARCHAR(100)#false", "description#VARCHAR(500)", "account_type_id#INT#false", "time_zone_id#INT#false" },
             null,
-            new String[] { "account_type_id#account_type#id" }),
+            new String[] { "account_type_id#account_type#id", "time_zone_id#time_zone#id" }),
     ADVERTISER("advertiser",
-            new String[] { "name#VARCHAR(100)#false", "description#VARCHAR(500)", "account_id#INT#false" },
+            new String[] { "name#VARCHAR(100)#false", "description#VARCHAR(500)", "account_id#INT#false", "time_zone_id#INT#false" },
             null,
-            new String[] { "account_id#account#id" }),
+            new String[] { "account_id#account#id", "time_zone_id#time_zone#id"  }),
     ADVERTISEMENT("advertisement",
             new String[] { "name#VARCHAR(100)#false", "description#VARCHAR(500)", "advertiser_id#INT#false", "choose_performing_creative#boolean#false" },
             null,
@@ -179,6 +194,9 @@ public enum WmAdTable {
             queries.add(new Query("ActiveCreativesByAdvertisementIds",
                     "(where: {is_deleted: {_eq: false}, advertisement_id: {_in: \" + adIds + \"}})",
                     "adIds"));
+            queries.add(new Query("CreativesByAdvertisementIdsOrModifiedAfter",
+                    "(where: {_or: [{advertisement_id: {_in: \" + adIds + \"}}, {updated_at: {_gte: \" + lastModifiedDate + \"}}]})",
+                    "adIds", "Date:lastModified"));
             return queries;
         }
     },
@@ -193,6 +211,9 @@ public enum WmAdTable {
             queries.add(new Query("ActiveAssetsByCreativeIds",
                     "(where: {is_deleted: {_eq: false}, creative_id: {_in: \" + creativeIds + \"}})",
                     "creativeIds"));
+            queries.add(new Query("AssetsByCreativeIdsOrModifiedAfter",
+                    "(where: {_or: [{creative_id: {_in: \" + creativeIds + \"}}, {updated_at: {_gte: \" + lastModifiedDate + \"}}]})",
+                    "creativeIds", "Date:lastModified"));
             return queries;
         }
     },
@@ -241,6 +262,10 @@ public enum WmAdTable {
                     "(where: {is_deleted: {_eq: false}, target_type: {_eq: \\\"\" + type\r\n"
                     + "                + \"\\\"}, target_value_id: {_in: \" + targetIds + \"}})",
                     "String:type", "targetIds"));
+            queries.add(new Query("TargetsByTypeAndIdsOrModifiedAfter",
+                    "(where: {target_type: {_eq: \\\"\" + type\r\n"
+                    + "                + \"\\\"}, {_or: [{target_value_id: {_in: \" + targetIds + \"}}, {updated_at: {_gte: \" + lastModifiedDate + \"}}]}})",
+                    "String:type", "targetIds", "Date:lastModified"));
             return queries;
         }
     },
@@ -257,7 +282,7 @@ public enum WmAdTable {
                     "campaign_budget_id#campaign_budget#id", "time_zone_id#time_zone#id", "cost_method_id#cost_method#id" }),
     FLIGHT("flight",
             new String[] { "name#VARCHAR(100)#false", "description#VARCHAR(500)", "campaign_id#INT#false",
-                    "flight_budget_id#INT#false", "cost_method_id#INT" },
+                    "flight_budget_id#INT", "cost_method_id#INT" },
             null,
             new String[] { "campaign_id#campaign#id", "flight_budget_id#flight_budget#id", "cost_method_id#cost_method#id" }),
     FLIGHT_ADVERTISEMENT("flight_advertisement",
@@ -268,6 +293,9 @@ public enum WmAdTable {
             final List<Query> queries = new ArrayList<>();
             queries.add(new Query("ActiveFlightAdvertisementByFlightIds",
                     "(where: {is_deleted: {_eq: false}, flight_id: {_in: \" + flightIds + \"}})", "flightIds"));
+            queries.add(new Query("FlightAdvertisementByFlightIdsOrModifiedAfter",
+                    "(where: {_or: [{flight_id: {_in: \" + flightIds + \"}}, {updated_at: {_gte: \" + lastModifiedDate + \"}}]})",
+                    "flightIds", "Date:lastModified"));
             return queries;
         }
     },
@@ -280,6 +308,9 @@ public enum WmAdTable {
             queries.add(new Query("FlightsByTargetIds",
                     "(where: {is_deleted: {_eq: false}, target_id: {_in: \" + targetIds + \"}})",
                      "targetIds"));
+            queries.add(new Query("FlightsByTargetIdsOrModifiedAfter",
+                    "(where: {_or: [{target_id: {_in: \" + targetIds + \"}}, {updated_at: {_gte: \" + lastModifiedDate + \"}}]})",
+                    "targetIds", "Date:lastModified"));
             return queries;
         }
     },
@@ -292,6 +323,9 @@ public enum WmAdTable {
             queries.add(new Query("TargetsByOsIds",
                     "(where: {is_deleted: {_eq: false}, os_id: {_in: \" + osIds + \"}})",
                     "osIds"));
+            queries.add(new Query("TargetsByOsIdsOrModifiedAfter",
+                    "(where: {_or: [{os_id: {_in: \" + osIds + \"}}, {updated_at: {_gte: \" + lastModifiedDate + \"}}]})",
+                    "osIds", "Date:lastModified"));
             return queries;
         }
     },
@@ -304,6 +338,9 @@ public enum WmAdTable {
             queries.add(new Query("TargetsByBrowserIds",
                     "(where: {is_deleted: {_eq: false}, browser_id: {_in: \" + browserIds + \"}})",
                     "browserIds"));
+            queries.add(new Query("TargetsByBrowserIdsOrModifiedAfter",
+                    "(where: {_or: [{browser_id: {_in: \" + browserIds + \"}}, {updated_at: {_gte: \" + lastModifiedDate + \"}}]})",
+                    "browserIds", "Date:lastModified"));
             return queries;
         }
     },
@@ -316,6 +353,9 @@ public enum WmAdTable {
             queries.add(new Query("TargetsByAdZoneIds",
                     "(where: {is_deleted: {_eq: false}, ad_zone_id: {_in: \" + adZoneIds + \"}})",
                     "adZoneIds"));
+            queries.add(new Query("TargetsByAdZoneIdsOrModifiedAfter",
+                    "(where: {_or: [{ad_zone_id: {_in: \" + adZoneIds + \"}}, {updated_at: {_gte: \" + lastModifiedDate + \"}}]})",
+                    "adZoneIds", "Date:lastModified"));
             return queries;
         }
     },
@@ -328,6 +368,9 @@ public enum WmAdTable {
             queries.add(new Query("TargetsByAdZoneLocationIds",
                     "(where: {is_deleted: {_eq: false}, ad_zone_location_id: {_in: \" + adZoneLocationIds + \"}})",
                     "adZoneLocationIds"));
+            queries.add(new Query("TargetsByAdZoneLocationIdsOrModifiedAfter",
+                    "(where: {_or: [{ad_zone_location_id: {_in: \" + adZoneLocationIds + \"}}, {updated_at: {_gte: \" + lastModifiedDate + \"}}]})",
+                    "adZoneLocationIds", "Date:lastModified"));
             return queries;
         }
     },
@@ -340,6 +383,10 @@ public enum WmAdTable {
             queries.add(new Query("TargetsByKeywordTypeAndIds",
                     "(where: {is_deleted: {_eq: false}, keyword_type: {_eq: \\\"\" + type + \"\\\"}, keyword_id: {_in: \" + keywordIds + \"}})",
                      "String:type", "keywordIds"));
+            queries.add(new Query("TargetsByKeywordTypeAndIdsOrModifiedAfter",
+                    "(where: {keyword_type: {_eq: \\\"\" + type\r\n"
+                    + "                + \"\\\"}, {_or: [{keyword_id: {_in: \" + keywordIds + \"}}, {updated_at: {_gte: \" + lastModifiedDate + \"}}]}})",
+                    "String:type", "keywordIds", "Date:lastModified"));
             return queries;
         }
     },
@@ -352,6 +399,9 @@ public enum WmAdTable {
             queries.add(new Query("TargetsByDayPartIds",
                     "(where: {is_deleted: {_eq: false}, day_part_target_id: {_in: \" + dayPartIds + \"}})",
                     "dayPartIds"));
+            queries.add(new Query("TargetsByDayPartIdsOrModifiedAfter",
+                    "(where: {_or: [{day_part_target_id: {_in: \" + dayPartIds + \"}}, {updated_at: {_gte: \" + lastModifiedDate + \"}}]})",
+                    "dayPartIds", "Date:lastModified"));
             return queries;
             
         }
@@ -365,6 +415,9 @@ public enum WmAdTable {
             queries.add(new Query("TargetsBySalesRegionIds",
                     "(where: {is_deleted: {_eq: false}, sales_region_id: {_in: \" + salesRegionIds + \"}})",
                     "salesRegionIds"));
+            queries.add(new Query("TargetsBySalesRegionIdsOrModifiedAfter",
+                    "(where: {_or: [{sales_region_id: {_in: \" + salesRegionIds + \"}}, {updated_at: {_gte: \" + lastModifiedDate + \"}}]})",
+                    "salesRegionIds", "Date:lastModified"));
             return queries;
             
         }
@@ -378,6 +431,9 @@ public enum WmAdTable {
             queries.add(new Query("TargetsByBrandRegionIds",
                     "(where: {is_deleted: {_eq: false}, brand_region_id: {_in: \" + brandRegionIds + \"}})",
                     "brandRegionIds"));
+            queries.add(new Query("TargetsByBrandRegionIdsOrModifiedAfter",
+                    "(where: {_or: [{brand_region_id: {_in: \" + brandRegionIds + \"}}, {updated_at: {_gte: \" + lastModifiedDate + \"}}]})",
+                    "brandRegionIds", "Date:lastModified"));
             return queries;
             
         }
@@ -396,6 +452,14 @@ public enum WmAdTable {
                             + "                + \"                       {sales_postal_code_id: {_in: \" + postalIds + \"}},\"\r\n"
                             + "                + \"                       {sales_state_id: {_in: \" + stateIds + \"}}]})",
                     "countryIds", "stateIds", "cityIds", "postalIds"));
+            queries.add(new Query("GeoTargetByCountryIdsOrStateIdsOrCityIdsOrPostalIdsOrModifiedAfter",
+                    "(where: {_or: [\"\r\n"
+                            + "                + \"                       {sales_city_id: {_in: \" + cityIds + \"}},\"\r\n"
+                            + "                + \"                       {sales_country_id: {_in: \" + countryIds + \"}},\"\r\n"
+                            + "                + \"                       {sales_postal_code_id: {_in: \" + postalIds + \"}},\"\r\n"
+                            + "                + \"                       {sales_state_id: {_in: \" + stateIds + \"}},\"\r\n"
+                            + "                + \"                       {updated_at: {_gte: \" + lastModifiedDate + \"}}]})",
+                    "countryIds", "stateIds", "cityIds", "postalIds", "Date:lastModified"));
             return queries;
         }
     },
@@ -411,6 +475,13 @@ public enum WmAdTable {
                     + "                + \"                       {device_make_id: {_in: \" + deviceMakeIds + \"}},\"\r\n"
                     + "                + \"                       {device_model_id: {_in: \" + deviceModelIds + \"}}]})",
                     "deviceTypeIds", "deviceMakeIds", "deviceModelIds"));
+            queries.add(new Query("DeviceTargetByDeviceTypeIdsOrDeviceMakeIdsOrDeviceModelIdsOrModifiedAfter",
+                    "(where: {_or: [\"\r\n"
+                    + "                + \"                       {device_type_id: {_in: \" + deviceTypeIds + \"}},\"\r\n"
+                    + "                + \"                       {device_make_id: {_in: \" + deviceMakeIds + \"}},\"\r\n"
+                    + "                + \"                       {device_model_id: {_in: \" + deviceModelIds + \"}},\"\r\n"
+                    + "                + \"                       {updated_at: {_gte: \" + lastModifiedDate + \"}}]})",
+                    "deviceTypeIds", "deviceMakeIds", "deviceModelIds", "Date:lastModified"));
             return queries;
         }
     },
