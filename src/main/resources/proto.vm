@@ -21,4 +21,6 @@ message $type.name {
   string createdBy = $index;
 #set ($index = $index + 1)
   string updatedBy = $index;
+#set ($index = $index + 1)
+  bool isDeleted = $index;
 }

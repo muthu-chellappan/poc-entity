@@ -51,6 +51,24 @@ public class SqlGeneratorTest {
     }
 
     @Test
+    public void testGenerateFromMacaEnum() throws Exception {
+        final Map<String, Object> context = new HashMap<>();
+        final MacaTable[] tables = MacaTable.values();
+        final List<Table> lt = new ArrayList<>();
+        context.put("tables", lt);
+        for (final MacaTable table : tables) {
+            lt.add(table.get());
+        }
+        final String template = "./src/main/resources/postgresql_create.vm";
+        final Writer writer = new StringWriter();
+        final SqlGenerator gen = new SqlGenerator();
+        gen.generate(template, context, writer);
+        final String out = writer.toString();
+        assertNotNull(out);
+        System.out.println(out);
+    }
+
+    @Test
     public void testGenerateInsertFromEnum() throws Exception {
         final Map<String, Object> context = new HashMap<>();
         final WmAdTableInsert[] inserts = WmAdTableInsert.values();
