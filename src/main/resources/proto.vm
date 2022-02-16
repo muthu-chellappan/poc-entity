@@ -1,7 +1,5 @@
 syntax = "proto3";
 
-package com.macapayments.services.entity.${type.lowerCaseName};
-
 option java_multiple_files = true;
 option java_package = "com.macapayments.services.entity.${type.lowerCaseName}";
 option java_outer_classname = "${type.name}Entity";
