@@ -32,7 +32,7 @@ public class SqlGeneratorTest {
         System.out.println(out);
     }
 
-    @Test
+    @Ignore @Test
     public void testGenerateFromEnum() throws Exception {
         final Map<String, Object> context = new HashMap<>();
         final WmAdTable[] tables = WmAdTable.values();
@@ -59,7 +59,7 @@ public class SqlGeneratorTest {
         for (final MacaTable table : tables) {
             lt.add(table.get());
         }
-        final String template = "./src/main/resources/postgresql_create.vm";
+        final String template = "./src/main/resources/postgresql_maca_create.vm";
         final Writer writer = new StringWriter();
         final SqlGenerator gen = new SqlGenerator();
         gen.generate(template, context, writer);
@@ -68,7 +68,7 @@ public class SqlGeneratorTest {
         System.out.println(out);
     }
 
-    @Test
+    @Ignore @Test
     public void testGenerateInsertFromEnum() throws Exception {
         final Map<String, Object> context = new HashMap<>();
         final WmAdTableInsert[] inserts = WmAdTableInsert.values();

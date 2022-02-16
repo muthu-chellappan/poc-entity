@@ -1,0 +1,41 @@
+#foreach( $table in $tables)
+DROP TABLE IF EXISTS maca.${table.name} CASCADE;
+#end
+
+-- Drop the function if already available
+DROP FUNCTION IF EXISTS update_updated_at_column();
+
+-- provided the field is named the same thing in all tables that use this, you can use a centralized function
+CREATE FUNCTION update_updated_at_column() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+  BEGIN
+    NEW.updated_at = NOW();
+    RETURN NEW;
+  END;
+$$;
+
+#foreach( $table in $tables)
+
+CREATE TABLE maca.${table.name} (
+  "id" SERIAL NOT NULL,
+#foreach( $column in $table.columns )
+  "$column.name" $column.type $column.nullable $column.value,
+#end
+  "createdAt" TIMESTAMP NOT NULL DEFAULT 'now'::timestamp,
+  "updatedAt" TIMESTAMP NOT NULL DEFAULT 'now'::timestamp,
+  "createdBy" VARCHAR(255),
+  "updatedBy" VARCHAR(255),
+  "isDeleted" BOOLEAN DEFAULT FALSE,
+#foreach( $constraint in $table.constraints )
+  CONSTRAINT ${table.name}_${constraint.name} $constraint.type ($constraint.content),
+#end
+#foreach( $key in $table.keys )
+  FOREIGN KEY ("$key.col") REFERENCES maca.${key.table} ("$key.foreign"),
+#end
+  PRIMARY KEY ("id")
+);
+
+CREATE TRIGGER ${table.name}_updated_at_modtime BEFORE UPDATE ON maca.${table.name} FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
+
+#end

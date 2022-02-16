@@ -32,17 +32,17 @@ public class ${type.name}Repo extends AbstractGraphQLRepository<${type.name}> {
 #foreach( $field in $type.fields)
         builder.append("   $field.tableFieldName\r\n");
 #end
-        builder.append("   created_at\r\n");
-        builder.append("   updated_at\r\n");
-        builder.append("   created_by\r\n");
-        builder.append("   updated_by\r\n");
-        builder.append("   is_deleted\r\n");
+        builder.append("   createdAt\r\n");
+        builder.append("   updatedAt\r\n");
+        builder.append("   createdBy\r\n");
+        builder.append("   updatedBy\r\n");
+        builder.append("   isDeleted\r\n");
         builder.append("}\r\n");
     }
 
     public List<${type.name}> getActive${type.plural}(){
         final String name = "Active";
-        final String filter = "(where: {is_deleted: {_eq: false}})";
+        final String filter = "(where: {isDeleted: {_eq: false}})";
         log.debug("Fetching query for ${type.name}(s): {} with filter: {}", name, filter);
         return execute(name, filter, ENTITY, ${type.name}.class);
     }
@@ -51,7 +51,7 @@ public class ${type.name}Repo extends AbstractGraphQLRepository<${type.name}> {
         Objects.requireNonNull(lastModified);
         String lastModifiedDate = YYYY_MM_DD_FORMATTER.format(lastModified);
         final String name = "UpdatedAfter";
-        final String filter = "(where: {updated_at: {_gte: \"" + lastModifiedDate + "\"}})";
+        final String filter = "(where: {updatedAt: {_gte: \"" + lastModifiedDate + "\"}})";
         log.debug("Fetching query for ${type.name}(s): {} with filter: {}", name, filter);
         return execute(name, filter, ENTITY, ${type.name}.class);
     }
