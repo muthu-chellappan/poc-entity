@@ -11,16 +11,16 @@ message $type.name {
   int32 id = $index;
 #foreach( $field in $type.fields)
 #set ($index = $index + 1)
-  $field.ptype $field.name = $index;
+  $field.ptype $field.tableFieldName = $index;
 #end
 #set ($index = $index + 1)
-  int64 createdAt = $index;
+  int64 created_at = $index;
 #set ($index = $index + 1)
-  int64 updatedAt = $index;
+  int64 updated_at = $index;
 #set ($index = $index + 1)
-  string createdBy = $index;
+  string created_by = $index;
 #set ($index = $index + 1)
-  string updatedBy = $index;
+  string updated_by = $index;
 #set ($index = $index + 1)
-  bool isDeleted = $index;
+  bool is_deleted = $index;
 }

@@ -26,9 +26,18 @@ public class ${type.name}Repo extends AbstractGraphQLRepository<${type.name}> {
         return ${type.name}.newBuilder();
     }
 
-    protected void appendAllFields(final StringBuilder builder) {
-        //${type.name}.appendAllFields(builder);
-        // TODO
+    protected void appendAllFields(final StringBuilder builder){
+        builder.append("{\r\n");
+        builder.append("   id\r\n");
+#foreach( $field in $type.fields)
+        builder.append("   $field.tableFieldName\r\n");
+#end
+        builder.append("   created_at\r\n");
+        builder.append("   updated_at\r\n");
+        builder.append("   created_by\r\n");
+        builder.append("   updated_by\r\n");
+        builder.append("   is_deleted\r\n");
+        builder.append("}\r\n");
     }
 
     public List<${type.name}> getActive${type.plural}(){
