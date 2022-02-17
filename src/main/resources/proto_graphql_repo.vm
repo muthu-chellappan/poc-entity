@@ -25,6 +25,10 @@ public class ${type.name}Repo extends AbstractGraphQLRepository<${type.name}> {
     protected ${type.name}.Builder newBuilder() {
         return ${type.name}.newBuilder();
     }
+    
+    public Integer getIdValue(${type.name} entity) {
+        return entity.getId();
+    }
 
     protected void appendAllFields(final StringBuilder builder){
         builder.append("{\r\n");
