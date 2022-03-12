@@ -299,6 +299,21 @@ public enum WmAdTable {
             return queries;
         }
     },
+    CREATIVE_TARGET("creative_target",
+            new String[] { "creative_id#INT#false", "target_id#INT#false" },
+            new String[] { "creative_id_target_id#UNIQUE#creative_id,target_id" },
+            new String[] { "creative_id#flight#id", "target_id#target#id" }){
+        public List<Query> getQueries() {
+            final List<Query> queries = new ArrayList<>();
+            queries.add(new Query("CreativesByTargetIds",
+                    "(where: {is_deleted: {_eq: false}, target_id: {_in: \" + targetIds + \"}})",
+                     "targetIds"));
+            queries.add(new Query("CreativesByTargetIdsOrModifiedAfter",
+                    "(where: {_or: [{target_id: {_in: \" + targetIds + \"}}, {updated_at: {_gte: \" + lastModifiedDate + \"}}]})",
+                    "targetIds", "Date:lastModified"));
+            return queries;
+        }
+    },
     FLIGHT_TARGET("flight_target",
             new String[] { "flight_id#INT#false", "target_id#INT#false" },
             new String[] { "flight_id_target_id#UNIQUE#flight_id,target_id" },
