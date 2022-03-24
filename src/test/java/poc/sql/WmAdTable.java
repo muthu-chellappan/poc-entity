@@ -284,7 +284,15 @@ public enum WmAdTable {
             new String[] { "name#VARCHAR(100)#false", "description#VARCHAR(500)", "campaign_id#INT#false",
                     "flight_budget_id#INT", "cost_method_id#INT" },
             null,
-            new String[] { "campaign_id#campaign#id", "flight_budget_id#flight_budget#id", "cost_method_id#cost_method#id" }),
+            new String[] { "campaign_id#campaign#id", "flight_budget_id#flight_budget#id", "cost_method_id#cost_method#id" }){
+        public List<Query> getQueries() {
+            final List<Query> queries = new ArrayList<>();
+            queries.add(new Query("ActiveFlightsByCreativeIds",
+                    "(where: {is_deleted: {_eq: false}, flight_advertisements: {advertisement: {creatives: {id: {_in: \" + creativeIds + \"}}}}})",
+                    "creativeIds"));
+            return queries;
+        }
+    },
     FLIGHT_ADVERTISEMENT("flight_advertisement",
             new String[] { "flight_id#INT#false", "advertisement_id#INT#false" },
             new String[] { "flight_id_advertisement_id#UNIQUE#flight_id,advertisement_id" },
@@ -302,7 +310,7 @@ public enum WmAdTable {
     CREATIVE_TARGET("creative_target",
             new String[] { "creative_id#INT#false", "target_id#INT#false" },
             new String[] { "creative_id_target_id#UNIQUE#creative_id,target_id" },
-            new String[] { "creative_id#flight#id", "target_id#target#id" }){
+            new String[] { "creative_id#creative#id", "target_id#target#id" }){
         public List<Query> getQueries() {
             final List<Query> queries = new ArrayList<>();
             queries.add(new Query("CreativesByTargetIds",
